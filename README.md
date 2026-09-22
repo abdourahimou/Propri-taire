@@ -24,7 +24,18 @@ Ubiquiti
 
 Projects
 
-…
+network-lab
+
+fortigate-lab
+
+windows-server-lab
+
+cybersecurity-lab
+
+network-audit-template
+
+infrastructure-documentation
+
 
 Certifications
 
