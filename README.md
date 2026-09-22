@@ -32,6 +32,6 @@ Certifications
 
 Contact
 
-LinkedIn :
+LinkedIn : https://www.linkedin.com/in/abdou-rahimou-seidou-hama-0431081b9
 Portfolio
 Email : seidouhama2016@gmail.com
