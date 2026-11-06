@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 24/40 — OSPF : DR, BDR, types réseau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">3.0 IP Connectivity</span>
+    <span class="obj">3.4</span>
+    <span class="num">24<small>/40</small></span>
+  </header>
+  <h1>OSPF : DR, BDR, types réseau</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Configurer et vérifier l’élection DR/BDR, et les types de réseau OSPF broadcast et point-to-point.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Réseau broadcast (Ethernet, type par défaut) : élection d’un DR (Designated Router) et d’un BDR pour limiter le nombre d’adjacences. Les DROther ne passent en Full qu’avec le DR et le BDR.</li>
+<li>Les DROther envoient leurs mises à jour au DR et au BDR sur <code>224.0.0.6</code> ; le DR les rediffuse à tous sur <code>224.0.0.5</code>.</li>
+<li>Élection : priorité d’interface la plus haute (1 par défaut, de 0 à 255), puis RID le plus élevé. Priorité 0 : jamais DR ni BDR.</li>
+<li>Élection non préemptive : un routeur plus prioritaire arrivé ensuite ne prend pas la place. Si le DR tombe, le BDR devient DR et un nouveau BDR est élu.</li>
+<li>Point-to-point (liaison série, ou Ethernet avec <code>ip ospf network point-to-point</code>) : pas d’élection, passage direct en Full. Recommandé entre deux routeurs sur Ethernet.</li>
+<li>Le DR est élu par segment : un routeur peut être DR sur une interface et DROther sur une autre.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 46" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Élection DR et BDR">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<line x1="8" y1="16" x2="116" y2="16" stroke="#1C1F26" stroke-width="0.5"/><text x="116" y="14.6" font-size="2" text-anchor="end" class="m">10.0.0.0/24</text><line x1="18" y1="9.5" x2="18" y2="16" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<circle cx="18" cy="6" r="4"/>
+<line x1="15.52" y1="3.52" x2="20.48" y2="8.48"/>
+<line x1="15.52" y1="8.48" x2="20.48" y2="3.52"/></g><text x="22.8" y="5" font-size="2.4" font-weight="600">R1</text><text x="18" y="20" font-size="2" text-anchor="middle" class="m">prio 1</text><text x="18" y="22.8" font-size="1.9" text-anchor="middle" class="m t2">RID 1.1.1.1</text><text x="18" y="26" font-size="2.4" text-anchor="middle" font-weight="600">DROther</text><line x1="46" y1="9.5" x2="46" y2="16" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<circle cx="46" cy="6" r="4"/>
+<line x1="43.52" y1="3.52" x2="48.48" y2="8.48"/>
+<line x1="43.52" y1="8.48" x2="48.48" y2="3.52"/></g><text x="50.8" y="5" font-size="2.4" font-weight="600">R2</text><text x="46" y="20" font-size="2" text-anchor="middle" class="m">prio 100</text><text x="46" y="22.8" font-size="1.9" text-anchor="middle" class="m t2">RID 2.2.2.2</text><text x="46" y="26" font-size="2.4" text-anchor="middle" font-weight="600" class="acc">DR</text><line x1="74" y1="9.5" x2="74" y2="16" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<circle cx="74" cy="6" r="4"/>
+<line x1="71.52" y1="3.52" x2="76.48" y2="8.48"/>
+<line x1="71.52" y1="8.48" x2="76.48" y2="3.52"/></g><text x="78.8" y="5" font-size="2.4" font-weight="600">R3</text><text x="74" y="20" font-size="2" text-anchor="middle" class="m">prio 50</text><text x="74" y="22.8" font-size="1.9" text-anchor="middle" class="m t2">RID 3.3.3.3</text><text x="74" y="26" font-size="2.4" text-anchor="middle" font-weight="600">BDR</text><line x1="102" y1="9.5" x2="102" y2="16" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<circle cx="102" cy="6" r="4"/>
+<line x1="99.52" y1="3.52" x2="104.48" y2="8.48"/>
+<line x1="99.52" y1="8.48" x2="104.48" y2="3.52"/></g><text x="106.8" y="5" font-size="2.4" font-weight="600">R4</text><text x="102" y="20" font-size="2" text-anchor="middle" class="m">prio 0</text><text x="102" y="22.8" font-size="1.9" text-anchor="middle" class="m t2">RID 4.4.4.4</text><text x="102" y="26" font-size="2.4" text-anchor="middle" font-weight="600">DROther</text><line x1="2" y1="30" x2="122" y2="30" stroke="#D6D0C4" stroke-width="0.25"/><text x="2" y="33" font-size="2.1" font-weight="600" class="m">R1# show ip ospf neighbor</text><text x="2" y="36.6" font-size="1.9" font-weight="600" class="m">Neighbor ID</text><text x="22" y="36.6" font-size="1.9" font-weight="600" class="m">Pri</text><text x="32" y="36.6" font-size="1.9" font-weight="600" class="m">State</text><text x="52" y="36.6" font-size="1.9" font-weight="600" class="m">Address</text><text x="2" y="39.8" font-size="1.9" class="m">2.2.2.2</text><text x="22" y="39.8" font-size="1.9" class="m">100</text><text x="32" y="39.8" font-size="1.9" class="m">FULL/DR</text><text x="52" y="39.8" font-size="1.9" class="m">10.0.0.2</text><text x="2" y="42.8" font-size="1.9" class="m">3.3.3.3</text><text x="22" y="42.8" font-size="1.9" class="m">50</text><text x="32" y="42.8" font-size="1.9" class="m">FULL/BDR</text><text x="52" y="42.8" font-size="1.9" class="m">10.0.0.3</text><text x="2" y="45.8" font-size="1.9" class="m">4.4.4.4</text><text x="22" y="45.8" font-size="1.9" class="m">0</text><text x="32" y="45.8" font-size="1.9" class="m">2WAY/DROTHER</text><text x="52" y="45.8" font-size="1.9" class="m">10.0.0.4</text><text x="72" y="39.8" font-size="2.1" class="t2">Full avec DR et BDR seulement ;</text><text x="72" y="42.8" font-size="2.1" class="t2">2-Way entre DROther.</text>
+</svg><figcaption><b>Fig. 24</b>R2 (priorité 100) est DR, R3 (50) BDR. R4, en priorité 0, ne peut être élu. R1 ne forme une adjacence complète qu’avec R2 et R3.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">51</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">3.0 IP Connectivity</span>
+    <span class="obj">3.4 — suite</span>
+    <span class="num">24<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">R2(config-if)#</span> ip ospf priority 100</td><td class="role">Favorise l’élection en DR</td></tr>
+<tr><td class="c"><span class="p">R4(config-if)#</span> ip ospf priority 0</td><td class="role">Exclut de l’élection</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> ip ospf network point-to-point</td><td class="role">Supprime l’élection sur le lien</td></tr>
+<tr><td class="c"><span class="p">R1#</span> clear ip ospf process</td><td class="role">Relance l’élection</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ip ospf neighbor</td><td class="role">FULL/DR, FULL/BDR, 2WAY/DROTHER</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ip ospf interface g0/0/0</td><td class="role">Type réseau, priorité, DR, BDR</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ip ospf interface brief</td><td class="role">État par interface (DR, P2P…)</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Augmenter la priorité ne suffit pas : l’élection n’est pas préemptive.</li>
+<li>Priorité 0 n’empêche pas les adjacences : le routeur reste DROther, en Full avec DR et BDR.</li>
+<li>En point-to-point, <code>show ip ospf neighbor</code> affiche <code>FULL/  -</code> : ni DR ni BDR.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Priorités par défaut, démarrage simultané. RID : R1 1.1.1.1, R2 2.2.2.2, R3 3.3.3.3. Qui devient DR ?<ul class="o four"><li><span class="l">A.</span>R1</li><li><span class="l">B.</span>R2</li><li><span class="l">C.</span>R3</li><li><span class="l">D.</span>Aucun</li></ul></li>
+<li>Quel réglage empêche un routeur de devenir DR ou BDR ?<ul class="o"><li><span class="l">A.</span>ip ospf priority 0</li><li><span class="l">B.</span>ip ospf priority 255</li><li><span class="l">C.</span>ip ospf priority 1</li><li><span class="l">D.</span>ip ospf cost 0</li></ul></li>
+<li>R1 est DROther. Quel état affiche-t-il pour un autre DROther ?<ul class="o"><li><span class="l">A.</span>FULL/DROTHER</li><li><span class="l">B.</span>INIT/DROTHER</li><li><span class="l">C.</span>EXSTART/DROTHER</li><li><span class="l">D.</span>2WAY/DROTHER</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>Priorité d’abord, RID ensuite ; 0 ne gagne jamais ; aucune préemption.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Priorités égales : le RID le plus élevé l’emporte.</p><p><span class="a">2&nbsp;A</span> Priorité 0 : exclusion de l’élection.</p><p><span class="a">3&nbsp;D</span> Deux DROther s’arrêtent en 2-Way ; seuls DR et BDR passent en Full.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">52</span>
+  </footer>
+</section>
+</body>
+</html>

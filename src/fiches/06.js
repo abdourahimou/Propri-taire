@@ -16,7 +16,7 @@ function schema() {
   g += row(4, 'MAC (48 bits)', [[24, '00 1A 2B', S.FILL], [24, '3C 4D 5E']]);
   g += row(12, '1. Couper en deux', [[24, '00 1A 2B', S.FILL], [12, ''], [24, '3C 4D 5E']]);
   g += row(20, '2. Insérer FF FE', [[24, '00 1A 2B'], [12, 'FF FE', S.FILL, true], [24, '3C 4D 5E']]);
-  g += row(28, '3. Inverser le 7e bit', [[24, '02 1A 2B', S.FILL, true], [12, 'FF FE'], [24, '3C 4D 5E']]);
+  g += row(28, '3. Inverser le 7<tspan baseline-shift="super" font-size="1.5">e</tspan> bit', [[24, '02 1A 2B', S.FILL, true], [12, 'FF FE'], [24, '3C 4D 5E']]);
   g += S.text(30, 36.6, '0x00 = 0000 0000 → 0000 0010 = 0x02', { mono: true, size: 2.1 });
   g += S.text(93, 36.6, 'bit U/L', { size: 2.1, acc: true });
   g += S.line(1, 39, 123, 39, { color: S.RULE });
