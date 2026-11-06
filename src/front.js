@@ -1,7 +1,7 @@
 // Pages liminaires du pack : couverture, mode d'emploi, sommaire (2 pages).
 const fs = require('fs');
 const path = require('path');
-const { typo, CSS, FONTS, FONTS_SYMBOLS, TOTAL, FRONT_PAGES } = require('./template');
+const { typo, AUTHOR, CSS, FONTS, FONTS_SYMBOLS, TOTAL, FRONT_PAGES } = require('./template');
 
 const DOMAINS = [
   ['1.0', 'Network Fundamentals', 20],
@@ -28,6 +28,7 @@ table.dom td.n, table.dom th.n { text-align: right; width: 12mm; }
 table.dom td.code { font-family: var(--f-title); font-weight: 600; width: 9mm; }
 table.dom td.bar { width: 30mm; }
 table.dom td.bar i { display: block; height: 2mm; background: var(--ink); }
+.cover .author { font-family: var(--f-title); font-weight: 600; font-size: 10pt; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); margin-top: 2mm; }
 .cover .edition { margin-top: 4mm; font-size: 8pt; color: var(--ink-2); }
 .howto h1 { margin-top: 0; }
 .howto h2 { margin-top: 2.6mm; }
@@ -51,7 +52,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 const pad = (n) => String(n).padStart(2, '0');
 
 function foot(page) {
-  return `<footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand></span><span class="pg">${page || ''}</span></footer>`;
+  return `<footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand>${AUTHOR}</span><span class="pg">${page || ''}</span></footer>`;
 }
 
 function render(fiches) {
@@ -67,6 +68,7 @@ function render(fiches) {
   <div class="big">CCNA</div>
   <div class="exam">200-301</div>
   <div class="sub">Fiches de révision</div>
+  <div class="author">${AUTHOR}</div>
   <div class="count"><b>${TOTAL}</b><span>fiches recto-verso, alignées sur les six domaines de l'examen et leur pondération</span></div>
   <table class="dom"><thead><tr><th></th><th>Domaine</th><th></th><th class="n">Poids</th><th class="n">Fiches</th></tr></thead><tbody>${domRows}</tbody></table>
   <p class="edition">Édition 2026 · en français</p>

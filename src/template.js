@@ -15,6 +15,7 @@ const FONTS_SYMBOLS =
   '&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap';
 
 const TOTAL = 40;
+const AUTHOR = 'Seidou Hama Abdou Rahimou';
 const FRONT_PAGES = 4; // couverture, mode d'emploi, sommaire (2 pages)
 
 const NNBSP = ' '; // espace fine insécable
@@ -60,7 +61,7 @@ function band(f, cont) {
 function foot(page) {
   return `<footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>${AUTHOR}</span>
     <span class="pg">${page}</span>
   </footer>`;
 }
@@ -122,4 +123,4 @@ ${typo(body)}
 </html>`;
 }
 
-module.exports = { render, typo, TOTAL, FRONT_PAGES, FONTS, FONTS_SYMBOLS, CSS };
+module.exports = { render, typo, AUTHOR, TOTAL, FRONT_PAGES, FONTS, FONTS_SYMBOLS, CSS };

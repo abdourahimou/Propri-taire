@@ -331,7 +331,7 @@ table.cmd tr.show td.role::before {
   font-variant-numeric: tabular-nums;
 }
 .foot .t { grid-column: 1 / 4; }
-.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; color: var(--ink); white-space: nowrap; }
 .foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
 
 /* ---- SVG ---- */
@@ -358,6 +358,7 @@ table.dom td.n, table.dom th.n { text-align: right; width: 12mm; }
 table.dom td.code { font-family: var(--f-title); font-weight: 600; width: 9mm; }
 table.dom td.bar { width: 30mm; }
 table.dom td.bar i { display: block; height: 2mm; background: var(--ink); }
+.cover .author { font-family: var(--f-title); font-weight: 600; font-size: 10pt; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); margin-top: 2mm; }
 .cover .edition { margin-top: 4mm; font-size: 8pt; color: var(--ink-2); }
 .howto h1 { margin-top: 0; }
 .howto h2 { margin-top: 2.6mm; }
@@ -386,10 +387,11 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="big">CCNA</div>
   <div class="exam">200-301</div>
   <div class="sub">Fiches de révision</div>
+  <div class="author">Seidou Hama Abdou Rahimou</div>
   <div class="count"><b>40</b><span>fiches recto-verso, alignées sur les six domaines de l’examen et leur pondération</span></div>
   <table class="dom"><thead><tr><th></th><th>Domaine</th><th></th><th class="n">Poids</th><th class="n">Fiches</th></tr></thead><tbody><tr><td class="code">1.0</td><td>Network Fundamentals</td><td class="bar"><i style="width:80%"></i></td><td class="n">20 %</td><td class="n">8</td></tr><tr><td class="code">2.0</td><td>Network Access</td><td class="bar"><i style="width:80%"></i></td><td class="n">20 %</td><td class="n">8</td></tr><tr><td class="code">3.0</td><td>IP Connectivity</td><td class="bar"><i style="width:100%"></i></td><td class="n">25 %</td><td class="n">10</td></tr><tr><td class="code">4.0</td><td>IP Services</td><td class="bar"><i style="width:40%"></i></td><td class="n">10 %</td><td class="n">4</td></tr><tr><td class="code">5.0</td><td>Security Fundamentals</td><td class="bar"><i style="width:60%"></i></td><td class="n">15 %</td><td class="n">6</td></tr><tr><td class="code">6.0</td><td>Automation & Programmability</td><td class="bar"><i style="width:40%"></i></td><td class="n">10 %</td><td class="n">4</td></tr></tbody></table>
   <p class="edition">Édition 2026 · en français</p>
-  <footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand></span><span class="pg"></span></footer>
+  <footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand>Seidou Hama Abdou Rahimou</span><span class="pg"></span></footer>
 </section>
 <section class="page howto">
   <h1>Mode d’emploi</h1>
@@ -420,17 +422,17 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <h2>Impression</h2>
   <p>A5 recto-verso, retournement bord long ; ou deux pages par feuille A4 paysage. Le PDF est vectoriel : texte net à toute taille, lisible aussi sur téléphone.</p>
   <p class="legal">Contenu fondé sur le blueprint public de l’examen Cisco CCNA 200-301 v1.1. Cisco, CCNA, IOS, Catalyst et Meraki sont des marques de Cisco Systems, Inc. Document indépendant, ni produit ni approuvé par Cisco.</p>
-  <footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand></span><span class="pg">2</span></footer>
+  <footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand>Seidou Hama Abdou Rahimou</span><span class="pg">2</span></footer>
 </section>
 <section class="page toc">
   <h1>Sommaire</h1>
   <table class="toc"><tbody><tr class="d"><td colspan="3">1.0 Network Fundamentals</td><td class="w">20 %</td></tr><tr><td class="num">01</td><td>Composants réseau et leurs rôles</td><td class="obj">1.1</td><td class="pg">5</td></tr><tr><td class="num">02</td><td>Topologies, cloud et virtualisation</td><td class="obj">1.2 · 1.12</td><td class="pg">7</td></tr><tr><td class="num">03</td><td>Câblage et défauts d’interface</td><td class="obj">1.3 · 1.4</td><td class="pg">9</td></tr><tr><td class="num">04</td><td>TCP et UDP comparés</td><td class="obj">1.5</td><td class="pg">11</td></tr><tr><td class="num">05</td><td>IPv4 : sous-réseaux et adressage privé</td><td class="obj">1.6 · 1.7 · 1.10</td><td class="pg">13</td></tr><tr><td class="num">06</td><td>IPv6 : adressage et types</td><td class="obj">1.8 · 1.9</td><td class="pg">15</td></tr><tr><td class="num">07</td><td>Principes radio du Wi-Fi</td><td class="obj">1.11</td><td class="pg">17</td></tr><tr><td class="num">08</td><td>Commutation et table MAC</td><td class="obj">1.13</td><td class="pg">19</td></tr><tr class="d"><td colspan="3">2.0 Network Access</td><td class="w">20 %</td></tr><tr><td class="num">09</td><td>VLAN : ports données et voix</td><td class="obj">2.1</td><td class="pg">21</td></tr><tr><td class="num">10</td><td>Trunk 802.1Q et native VLAN</td><td class="obj">2.2</td><td class="pg">23</td></tr><tr><td class="num">11</td><td>Routage inter-VLAN</td><td class="obj">2.1</td><td class="pg">25</td></tr><tr><td class="num">12</td><td>Découverte L2 : CDP, LLDP</td><td class="obj">2.3</td><td class="pg">27</td></tr><tr><td class="num">13</td><td>EtherChannel LACP</td><td class="obj">2.4</td><td class="pg">29</td></tr><tr><td class="num">14</td><td>Rapid PVST+ : élection et rôles</td><td class="obj">2.5</td><td class="pg">31</td></tr><tr><td class="num">15</td><td>Rapid PVST+ : PortFast et protections</td><td class="obj">2.5</td><td class="pg">33</td></tr><tr><td class="num">16</td><td>Architectures WLAN Cisco</td><td class="obj">2.6 · 2.7</td><td class="pg">35</td></tr></tbody></table>
-  <footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand></span><span class="pg">3</span></footer>
+  <footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand>Seidou Hama Abdou Rahimou</span><span class="pg">3</span></footer>
 </section>
 <section class="page toc">
   <div style="height:2mm"></div>
   <table class="toc"><tbody><tr class="d"><td colspan="3">3.0 IP Connectivity</td><td class="w">25 %</td></tr><tr><td class="num">17</td><td>Lire la table de routage</td><td class="obj">3.1</td><td class="pg">37</td></tr><tr><td class="num">18</td><td>Décision d’acheminement du routeur</td><td class="obj">3.2</td><td class="pg">39</td></tr><tr><td class="num">19</td><td>Routes statiques IPv4</td><td class="obj">3.3</td><td class="pg">41</td></tr><tr><td class="num">20</td><td>Routes statiques IPv6</td><td class="obj">3.3</td><td class="pg">43</td></tr><tr><td class="num">21</td><td>Routes par défaut et flottantes</td><td class="obj">3.3</td><td class="pg">45</td></tr><tr><td class="num">22</td><td>OSPFv2 : voisinage et états</td><td class="obj">3.4</td><td class="pg">47</td></tr><tr><td class="num">23</td><td>OSPFv2 : configuration zone unique</td><td class="obj">3.4</td><td class="pg">49</td></tr><tr><td class="num">24</td><td>OSPF : DR, BDR, types réseau</td><td class="obj">3.4</td><td class="pg">51</td></tr><tr><td class="num">25</td><td>OSPF : router ID et dépannage</td><td class="obj">3.4</td><td class="pg">53</td></tr><tr><td class="num">26</td><td>FHRP : HSRP, VRRP, GLBP</td><td class="obj">3.5</td><td class="pg">55</td></tr><tr class="d"><td colspan="3">4.0 IP Services</td><td class="w">10 %</td></tr><tr><td class="num">27</td><td>NAT statique, pool et PAT</td><td class="obj">4.1</td><td class="pg">57</td></tr><tr><td class="num">28</td><td>Services IP : DHCP, DNS, NTP</td><td class="obj">4.2 · 4.3 · 4.6</td><td class="pg">59</td></tr><tr><td class="num">29</td><td>Supervision : SNMP, Syslog, TFTP</td><td class="obj">4.4 · 4.5 · 4.9</td><td class="pg">61</td></tr><tr><td class="num">30</td><td>QoS : comportement par saut</td><td class="obj">4.7</td><td class="pg">63</td></tr><tr class="d"><td colspan="3">5.0 Security Fundamentals</td><td class="w">15 %</td></tr><tr><td class="num">31</td><td>Concepts et politiques de sécurité</td><td class="obj">5.1 · 5.2 · 5.4</td><td class="pg">65</td></tr><tr><td class="num">32</td><td>Accès aux équipements : SSH</td><td class="obj">5.3 · 4.8 · 2.8</td><td class="pg">67</td></tr><tr><td class="num">33</td><td>AAA et VPN IPsec</td><td class="obj">5.8 · 5.5</td><td class="pg">69</td></tr><tr><td class="num">34</td><td>Listes de contrôle d’accès</td><td class="obj">5.6</td><td class="pg">71</td></tr><tr><td class="num">35</td><td>Sécurité L2 : port security, snooping</td><td class="obj">5.7</td><td class="pg">73</td></tr><tr><td class="num">36</td><td>Wi-Fi : WPA2, WPA3, GUI WLC</td><td class="obj">5.9 · 5.10 · 2.9</td><td class="pg">75</td></tr><tr class="d"><td colspan="3">6.0 Automation & Programmability</td><td class="w">10 %</td></tr><tr><td class="num">37</td><td>Automatisation, contrôleurs et IA</td><td class="obj">6.1 · 6.2 · 6.4</td><td class="pg">77</td></tr><tr><td class="num">38</td><td>SDN : plans et API</td><td class="obj">6.3</td><td class="pg">79</td></tr><tr><td class="num">39</td><td>API REST et JSON</td><td class="obj">6.5 · 6.7</td><td class="pg">81</td></tr><tr><td class="num">40</td><td>Ansible et Terraform</td><td class="obj">6.6</td><td class="pg">83</td></tr></tbody></table>
-  <footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand></span><span class="pg">4</span></footer>
+  <footer class="foot"><span class="t">CCNA 200-301 — Fiches de révision</span><span class="brand" data-brand>Seidou Hama Abdou Rahimou</span><span class="pg">4</span></footer>
 </section>
 
 
@@ -486,7 +488,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 01</b>Chaîne type d’un campus. Le switch d’accès alimente les terminaux PoE ; l’AP léger renvoie le trafic de contrôle au WLC par un tunnel CAPWAP.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">5</span>
   </footer>
 </section>
@@ -514,7 +516,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> L’IPS est inline et peut rejeter le trafic ; l’IDS ne fait qu’alerter.</p><p><span class="a">2&nbsp;C</span> 802.3at (PoE+) : 30 W. 802.3af : 15,4 W ; 802.3ad : agrégation de liens.</p><p><span class="a">3&nbsp;D</span> Le routeur ne relaie pas les broadcasts ; chaque interface est un domaine distinct.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">6</span>
   </footer>
 </section>
@@ -595,7 +597,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 02</b>À gauche, le campus hiérarchique ; à droite, le spine-leaf, où tout serveur est à la même distance de tous les autres.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">7</span>
   </footer>
 </section>
@@ -624,7 +626,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Chaque leaf est relié à chaque spine : un seul spine sépare deux leafs.</p><p><span class="a">2&nbsp;C</span> IaaS : le fournisseur gère le matériel, le client gère OS et applications.</p><p><span class="a">3&nbsp;D</span> Chaque VRF possède sa propre table de routage.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">8</span>
   </footer>
 </section>
@@ -660,7 +662,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 03</b>En haut, SW1 en autonégociation face à SW2 forcé : la vitesse est détectée, le duplex retombe en half. En bas, coupes à l’échelle : gaine de 125 µm, cœur noir.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">9</span>
   </footer>
 </section>
@@ -689,7 +691,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Vitesse détectée (100) ; duplex non négocié : half par défaut à 100 Mbit/s.</p><p><span class="a">2&nbsp;C</span> Le côté half détecte des collisions tardives ; le côté full compte des CRC.</p><p><span class="a">3&nbsp;A</span> Seule la monomode couvre plusieurs kilomètres ; l’UTP plafonne à 100 m.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">10</span>
   </footer>
 </section>
@@ -719,7 +721,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 04</b>À gauche, ouverture TCP en trois temps, puis 500 octets acquittés (ack = 101 + 500). À droite, UDP envoie sans session ni accusé.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">11</span>
   </footer>
 </section>
@@ -748,7 +750,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;A</span> Le client émet SYN, le serveur SYN-ACK, le client confirme par ACK.</p><p><span class="a">2&nbsp;C</span> SNMP : UDP 161 et 162. SSH, HTTPS et SMTP utilisent TCP.</p><p><span class="a">3&nbsp;D</span> La taille de fenêtre fixe le volume non acquitté autorisé.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">12</span>
   </footer>
 </section>
@@ -795,7 +797,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 05</b>Plan VLSM de 192.168.10.0/24. Blocs alloués du plus grand au plus petit ; 192.168.10.232 à .255 restent libres (un /29 puis un /28).</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">13</span>
   </footer>
 </section>
@@ -825,7 +827,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> /21 = pas de 8 sur le 3<sup>e</sup> octet ; 45 est dans le bloc 40–47, broadcast 172.16.47.255.</p><p><span class="a">2&nbsp;C</span> /26 = 2<sup>6</sup> – 2 = 62 hôtes ; un /27 (30 hôtes) est insuffisant.</p><p><span class="a">3&nbsp;D</span> 169.254.0.0/16 (APIPA) est auto-attribuée faute d’offre DHCP.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">14</span>
   </footer>
 </section>
@@ -866,7 +868,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 06</b>MAC 00:1A:2B:3C:4D:5E sur le préfixe 2001:db8:acad:1::/64. Le même identifiant sert à la link-local automatique.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">15</span>
   </footer>
 </section>
@@ -895,7 +897,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Un seul :: ; 0010 devient 10 et les autres zéros restent écrits.</p><p><span class="a">2&nbsp;D</span> FE80::/10 : link-local. FC00::/7 : ULA ; 2000::/3 : GUA.</p><p><span class="a">3&nbsp;A</span> FFFE au milieu ; 00 devient 02 par inversion du 7<sup>e</sup> bit.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">16</span>
   </footer>
 </section>
@@ -925,7 +927,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 07</b>Un canal 2,4 GHz déborde sur ses quatre voisins de chaque côté. Les canaux 1, 6 et 11 sont espacés de 25 MHz, donc disjoints.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">17</span>
   </footer>
 </section>
@@ -952,7 +954,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> 1, 6 et 11 sont les seuls canaux 2,4 GHz sans chevauchement.</p><p><span class="a">2&nbsp;C</span> Le BSSID identifie un BSS par la MAC radio de l’AP.</p><p><span class="a">3&nbsp;D</span> Une radio ne détecte pas les collisions : elle les évite (CSMA/CA).</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">18</span>
   </footer>
 </section>
@@ -994,7 +996,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 08</b>Le switch apprend par la source et décide par la destination. La table ci-contre est celle obtenue après l’étape 3.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">19</span>
   </footer>
 </section>
@@ -1023,7 +1025,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Unknown unicast : inondation dans le VLAN, jamais sur le port d’entrée.</p><p><span class="a">2&nbsp;C</span> L’apprentissage porte sur la MAC source, associée au port et au VLAN.</p><p><span class="a">3&nbsp;D</span> Aging time par défaut : 300 secondes.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">20</span>
   </footer>
 </section>
@@ -1064,7 +1066,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 09</b>Un seul câble porte deux VLAN : la voix étiquetée du téléphone et les données non étiquetées du PC. Le port reste en mode access.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">21</span>
   </footer>
 </section>
@@ -1093,7 +1095,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> voice vlan définit le VLAN étiqueté utilisé par le téléphone.</p><p><span class="a">2&nbsp;A</span> 1–1005 : plage normale ; 1006–4094 : plage étendue.</p><p><span class="a">3&nbsp;B</span> Les ports restent affectés au VLAN 30 absent et cessent de transmettre.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">22</span>
   </footer>
 </section>
@@ -1144,7 +1146,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 10</b>Les VLAN 10 et 20 traversent le trunk étiquetés ; seul le native VLAN passe sans étiquette. En bas, place et contenu de l’étiquette 802.1Q.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">23</span>
   </footer>
 </section>
@@ -1174,7 +1176,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Aucun des deux côtés ne sollicite le trunk : le lien reste en accès.</p><p><span class="a">2&nbsp;D</span> 4 octets : TPID (16 bits) + PCP, DEI, VID (16 bits). Le VID seul fait 12 bits.</p><p><span class="a">3&nbsp;C</span> add complète la liste ; sans add, la liste est remplacée.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">24</span>
   </footer>
 </section>
@@ -1216,7 +1218,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 11</b>PC-A (VLAN 10) joint PC-B (VLAN 20) : la trame monte vers R1 étiquetée 10, R1 route, puis la renvoie étiquetée 20 sur le même lien.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">25</span>
   </footer>
 </section>
@@ -1246,7 +1248,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;A</span> La sous-interface se lie au VLAN par son encapsulation.</p><p><span class="a">2&nbsp;C</span> Une SVI monte si le VLAN existe et a un port actif ; ip routing n’agit pas sur l’état.</p><p><span class="a">3&nbsp;D</span> Le lien transporte plusieurs VLAN étiquetés : c’est un trunk.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">26</span>
   </footer>
 </section>
@@ -1285,7 +1287,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 12</b>Local Intrfce est le port de SW1 ; Port ID est le port du voisin. L’adresse IP du voisin n’apparaît qu’avec detail.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">27</span>
   </footer>
 </section>
@@ -1315,7 +1317,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;D</span> Seule la vue detail (ou show cdp entry) liste les adresses.</p><p><span class="a">2&nbsp;B</span> LLDP : 30 et 120 s. CDP : 60 et 180 s.</p><p><span class="a">3&nbsp;C</span> LLDP est la norme IEEE 802.1AB ; CDP est propriétaire Cisco.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">28</span>
   </footer>
 </section>
@@ -1351,7 +1353,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 13</b>Quatre liens deviennent Po1. Le canal ne se forme que si au moins un côté initie (active) ou si les deux sont forcés en on.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">29</span>
   </footer>
 </section>
@@ -1381,7 +1383,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> En passive, aucun côté n’initie la négociation LACP.</p><p><span class="a">2&nbsp;D</span> P = bundled in port-channel : membre actif.</p><p><span class="a">3&nbsp;C</span> 802.3ad (repris dans 802.1AX). 802.1w : RSTP ; 802.1Q : trunk.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">30</span>
   </footer>
 </section>
@@ -1420,7 +1422,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 14</b>SW1 (priorité 24576 + 10) est root. Sur le lien SW2–SW3, SW2 l’emporte par sa MAC plus faible : son port est DP, celui de SW3 est alternate.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">31</span>
   </footer>
 </section>
@@ -1449,7 +1451,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> 32768 + extended system ID 20 = 32788.</p><p><span class="a">2&nbsp;C</span> Priorités égales : la plus petite MAC l’emporte.</p><p><span class="a">3&nbsp;D</span> Alternate : autre chemin vers le root. Backup : secours d’un DP sur le même segment.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">32</span>
   </footer>
 </section>
@@ -1491,7 +1493,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 15</b>Root Guard protège le root depuis la distribution ; Loop Guard surveille le root port de l’accès ; BPDU Guard coupe le port où un switch a été branché.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">33</span>
   </footer>
 </section>
@@ -1521,7 +1523,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Le switch ajouté émet des BPDU : BPDU Guard désactive le port.</p><p><span class="a">2&nbsp;A</span> Root Guard refuse qu’un root apparaisse derrière ce port.</p><p><span class="a">3&nbsp;D</span> Loop Guard place le port en loop-inconsistent au lieu de le débloquer.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">34</span>
   </footer>
 </section>
@@ -1560,7 +1562,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 16</b>L’AP local n’a besoin que d’un VLAN : le WLC sort chaque SSID vers son VLAN. L’AP FlexConnect reçoit un trunk pour commuter localement.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">35</span>
   </footer>
 </section>
@@ -1589,7 +1591,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> FlexConnect commute localement et survit à la perte du contrôleur.</p><p><span class="a">2&nbsp;A</span> 5246 pour le contrôle, 5247 pour les données.</p><p><span class="a">3&nbsp;B</span> L’AP local n’utilise qu’un VLAN ; le trafic client est encapsulé dans CAPWAP.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">36</span>
   </footer>
 </section>
@@ -1619,7 +1621,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 17</b>Chaque champ de la ligne O identifié. La route S* fournit la gateway of last resort ; la ligne L est l’adresse propre de R1 sur g0/0/1.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">37</span>
   </footer>
 </section>
@@ -1646,7 +1648,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Le crochet contient [AD/métrique] : AD 110, métrique 3.</p><p><span class="a">2&nbsp;C</span> L (local) : adresse de l’interface en /32. C : réseau connecté.</p><p><span class="a">3&nbsp;D</span> S = statique, * = candidate par défaut. O*E2 est une route par défaut apprise par OSPF.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">38</span>
   </footer>
 </section>
@@ -1675,7 +1677,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 18</b>Quatre entrées couvrent 10.1.1.70 ; la barre montre la longueur de chaque préfixe. La /26 (10.1.1.64 à .127) gagne.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">39</span>
   </footer>
 </section>
@@ -1703,7 +1705,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> /24 couvre 4.0–4.255 (exclu) ; /22 couvre 4.0–7.255 : c’est la plus longue qui correspond.</p><p><span class="a">2&nbsp;C</span> Même préfixe : l’AD tranche, 110 (OSPF) contre 120 (RIP).</p><p><span class="a">3&nbsp;D</span> Statique : 1 ; connectée : 0.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">40</span>
   </footer>
 </section>
@@ -1748,7 +1750,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 19</b>R1 joint le LAN B par une route réseau et le serveur par une route d’hôte. Sans la route de R2, les réponses n’ont pas de chemin.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">41</span>
   </footer>
 </section>
@@ -1778,7 +1780,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;A</span> Route d’hôte = /32, soit 255.255.255.255.</p><p><span class="a">2&nbsp;C</span> Une statique récursive n’est installée que si son next hop est joignable.</p><p><span class="a">3&nbsp;B</span> Le retour vers 192.168.1.0/24 manque sur R2.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">42</span>
   </footer>
 </section>
@@ -1817,7 +1819,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 20</b>Les trois premières formes mènent au même LAN. La quatrième est refusée par IOS : un next hop link-local exige son interface.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">43</span>
   </footer>
 </section>
@@ -1847,7 +1849,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Next hop link-local : l’interface de sortie doit être indiquée.</p><p><span class="a">2&nbsp;C</span> ::/0 correspond à toutes les destinations. ::1 est la loopback.</p><p><span class="a">3&nbsp;D</span> 128 bits d’adresse : /128 désigne un seul hôte.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">44</span>
   </footer>
 </section>
@@ -1880,7 +1882,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 21</b>La flottante (AD 5) n’entre dans la table que lorsque g0/0/0 tombe ; elle en sort dès le retour de la principale.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">45</span>
   </footer>
 </section>
@@ -1909,7 +1911,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;D</span> Il faut dépasser 110 : avec 1 ou 5 la statique remplacerait OSPF ; à 110, égalité.</p><p><span class="a">2&nbsp;A</span> Masque 0.0.0.0 : aucun bit à comparer, toute destination correspond.</p><p><span class="a">3&nbsp;B</span> Une seule route par préfixe : celle de plus faible AD.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">46</span>
   </footer>
 </section>
@@ -1939,7 +1941,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 22</b>Chaque étape fait avancer l’état du voisin. Une MTU différente bloque l’échange en ExStart ou Exchange.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">47</span>
   </footer>
 </section>
@@ -1967,7 +1969,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Les DBD dépassant la MTU du voisin sont ignorés : l’échange ne progresse pas.</p><p><span class="a">2&nbsp;A</span> Dead = 4 × Hello, soit 40 s pour un Hello de 10 s.</p><p><span class="a">3&nbsp;B</span> 2-Way : la communication bidirectionnelle est confirmée.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">48</span>
   </footer>
 </section>
@@ -2012,7 +2014,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 23</b>R1 annonce 10.0.12.0/30 et son LAN passif, et propage sa route statique par défaut vers le FAI. Le lien FAI reste hors OSPF.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">49</span>
   </footer>
 </section>
@@ -2042,7 +2044,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Ni RID manuel ni loopback : plus haute IP d’interface active.</p><p><span class="a">2&nbsp;A</span> L’interface passive reste annoncée mais n’émet plus de Hello.</p><p><span class="a">3&nbsp;A</span> Process ID local ; entre DR et BDR, l’adjacence atteint FULL.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">50</span>
   </footer>
 </section>
@@ -2084,7 +2086,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 24</b>R2 (priorité 100) est DR, R3 (50) BDR. R4, en priorité 0, ne peut être élu. R1 ne forme une adjacence complète qu’avec R2 et R3.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">51</span>
   </footer>
 </section>
@@ -2113,7 +2115,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Priorités égales : le RID le plus élevé l’emporte.</p><p><span class="a">2&nbsp;A</span> Priorité 0 : exclusion de l’élection.</p><p><span class="a">3&nbsp;D</span> Deux DROther s’arrêtent en 2-Way ; seuls DR et BDR passent en Full.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">52</span>
   </footer>
 </section>
@@ -2149,7 +2151,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 25</b>Vérifier dans cet ordre : la plupart des pannes se trouvent aux étapes 1 à 4.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">53</span>
   </footer>
 </section>
@@ -2178,7 +2180,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Une loopback active passe avant les interfaces physiques, même d’adresse plus haute.</p><p><span class="a">2&nbsp;C</span> Ce message porte sur les champs du Hello : intervalles et masque.</p><p><span class="a">3&nbsp;D</span> Le RID est figé au démarrage du processus ; il faut le relancer.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">54</span>
   </footer>
 </section>
@@ -2223,7 +2225,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 26</b>Les PC utilisent .1, adresse que R1 porte tant qu’il est actif. En cas de panne, R2 reprend la même IP et la même MAC virtuelles.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">55</span>
   </footer>
 </section>
@@ -2252,7 +2254,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> VRRP (RFC 5798). HSRP et GLBP sont propriétaires Cisco ; PAgP concerne EtherChannel.</p><p><span class="a">2&nbsp;B</span> Le dernier octet est le groupe en hexadécimal : 10 = 0x0A.</p><p><span class="a">3&nbsp;D</span> L’AVG de GLBP distribue les MAC des AVF aux hôtes.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">56</span>
   </footer>
 </section>
@@ -2297,7 +2299,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 27</b>Deux hôtes ouvrent une session HTTPS avec le même port source : R1 garde 49152 pour le premier et réattribue un autre port au second.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">57</span>
   </footer>
 </section>
@@ -2328,7 +2330,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Inside local : adresse privée réelle de l’hôte interne.</p><p><span class="a">2&nbsp;C</span> overload active le PAT : multiplexage par numéro de port.</p><p><span class="a">3&nbsp;D</span> Sans adresse libre dans le pool, le paquet n’est pas traduit et il est rejeté.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">58</span>
   </footer>
 </section>
@@ -2358,7 +2360,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 28</b>Le client diffuse ; R1 relaie en unicast vers 10.0.50.10. Les réponses repassent par le relais avant d’atteindre le client.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">59</span>
   </footer>
 </section>
@@ -2389,7 +2391,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> DORA : Discover, Offer, Request, Ack.</p><p><span class="a">2&nbsp;C</span> L’interface qui reçoit le Discover diffusé est celle qui le relaie.</p><p><span class="a">3&nbsp;D</span> ntp server désigne la source ; ntp master fait du routeur une source.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">60</span>
   </footer>
 </section>
@@ -2430,7 +2432,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 29</b>Le manager interroge l’agent sur UDP 161 ; l’agent alerte sur UDP 162. Dans le message Syslog, 3 = error.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">61</span>
   </footer>
 </section>
@@ -2460,7 +2462,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Seul SNMPv3 (authPriv) chiffre ; v1 et v2c envoient la community en clair.</p><p><span class="a">2&nbsp;B</span> notifications = 5 ; les niveaux 0 à 5, plus graves ou égaux, sont envoyés.</p><p><span class="a">3&nbsp;A</span> TFTP : UDP 69, sans compte. FTP : TCP 20/21 ; SCP et SFTP passent par SSH.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">62</span>
   </footer>
 </section>
@@ -2493,7 +2495,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 30</b>En haut, le traitement d’un paquet dans un équipement. En bas, le même trafic (gris) limité par un policer et par un shaper (noir).</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">63</span>
   </footer>
 </section>
@@ -2523,7 +2525,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> EF (46) : expedited forwarding, pour la voix.</p><p><span class="a">2&nbsp;B</span> Le shaper retarde ; le policer rejette ou re-marque.</p><p><span class="a">3&nbsp;D</span> LLQ = CBWFQ + file prioritaire, limitée pour ne pas affamer les autres classes.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">64</span>
   </footer>
 </section>
@@ -2560,7 +2562,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 31</b>L’atténuation agit sur la vulnérabilité ou sur l’exploit. Deux éléments de la même catégorie ne forment pas une MFA.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">65</span>
   </footer>
 </section>
@@ -2587,7 +2589,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Carte (possession) et empreinte (biométrie) : deux catégories différentes.</p><p><span class="a">2&nbsp;A</span> L’exploit utilise la vulnérabilité ; la menace en est le danger potentiel.</p><p><span class="a">3&nbsp;B</span> User awareness : messages et campagnes destinés à tous ; le training cible des rôles.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">66</span>
   </footer>
 </section>
@@ -2632,7 +2634,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 32</b>SSH pour l’administration à distance, console pour l’accès de secours. Telnet transmet identifiants et commandes en clair.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">67</span>
   </footer>
 </section>
@@ -2663,7 +2665,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;A</span> transport input limite les protocoles acceptés par la ligne.</p><p><span class="a">2&nbsp;B</span> Le nom de la paire de clés reprend nom d’hôte et domaine.</p><p><span class="a">3&nbsp;C</span> Le type 7 est un encodage réversible, pas un hachage.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">68</span>
   </footer>
 </section>
@@ -2715,7 +2717,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 33</b>En site à site, les hôtes ignorent le chiffrement ; en accès distant, le poste porte lui-même le tunnel.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">69</span>
   </footer>
 </section>
@@ -2745,7 +2747,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> TACACS+ : TCP 49, autorisation distincte de l’authentification.</p><p><span class="a">2&nbsp;C</span> ESP chiffre ; AH authentifie seulement ; IKE négocie les clés.</p><p><span class="a">3&nbsp;D</span> Un poste isolé avec un client VPN : accès distant.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">70</span>
   </footer>
 </section>
@@ -2799,7 +2801,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 34</b>L’ACL étendue bloque le flux dès son entrée dans R1. Une ACL standard ne voit que la source : placée près de celle-ci, elle couperait l’accès à toutes les destinations.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">71</span>
   </footer>
 </section>
@@ -2830,7 +2832,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;D</span> /20 = 255.255.240.0 ; 255.255.255.255 – 255.255.240.0 = 0.0.15.255.</p><p><span class="a">2&nbsp;B</span> Première correspondance : la ligne 10 couvre .5.</p><p><span class="a">3&nbsp;A</span> Étendue : au plus près de la source, en entrée de g0/0/0.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">72</span>
   </footer>
 </section>
@@ -2875,7 +2877,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 35</b>Seul le port g0/1 peut émettre des réponses DHCP. DAI s’appuie sur la table construite par le snooping pour valider chaque ARP.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">73</span>
   </footer>
 </section>
@@ -2906,7 +2908,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> shutdown met le port en err-disabled.</p><p><span class="a">2&nbsp;B</span> Seuls les ports menant au vrai serveur doivent accepter Offer et Ack.</p><p><span class="a">3&nbsp;D</span> DAI valide chaque ARP ; le snooping ne fait que fournir la table.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">74</span>
   </footer>
 </section>
@@ -2936,7 +2938,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 36</b>Réglages d’un WLAN WPA2-PSK : sécurité dans Security > Layer 2, VLAN de sortie dans General, priorité dans QoS.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">75</span>
   </footer>
 </section>
@@ -2965,7 +2967,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> WPA2 = 802.11i avec AES-CCMP ; TKIP relève de WPA.</p><p><span class="a">2&nbsp;A</span> SAE résiste aux attaques par dictionnaire hors ligne.</p><p><span class="a">3&nbsp;D</span> Platinum : voix ; Gold : vidéo ; Silver : défaut ; Bronze : arrière-plan.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">76</span>
   </footer>
 </section>
@@ -3024,7 +3026,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 37</b>En haut, l’opérateur configure chaque équipement, ou exprime une politique que le contrôleur déploie. En bas, une chaîne d’IA appliquée à l’exploitation.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">77</span>
   </footer>
 </section>
@@ -3052,7 +3054,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Les mêmes modèles produisent les mêmes configurations, sans erreur de saisie.</p><p><span class="a">2&nbsp;C</span> Prévoir un état futur à partir de l’historique relève de l’IA prédictive.</p><p><span class="a">3&nbsp;D</span> Le contrôleur traduit l’intention et configure les équipements par ses API southbound.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">78</span>
   </footer>
 </section>
@@ -3105,7 +3107,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 38</b>À gauche, le contrôleur entre applications (nord) et équipements (sud). À droite, un tunnel overlay relie deux nœuds à travers l’underlay.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">79</span>
   </footer>
 </section>
@@ -3133,7 +3135,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Applications et scripts consomment l’API northbound du contrôleur.</p><p><span class="a">2&nbsp;C</span> Le plan de contrôle calcule les routes ; le plan de données les utilise.</p><p><span class="a">3&nbsp;D</span> VXLAN porte les données ; LISP sert au plan de contrôle ; IS-IS à l’underlay.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">80</span>
   </footer>
 </section>
@@ -3163,7 +3165,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 39</b>Lecture (GET) d’une interface par RESTCONF ; le routeur répond 200 OK avec un document JSON conforme au modèle YANG ietf-interfaces.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">81</span>
   </footer>
 </section>
@@ -3193,7 +3195,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Create = POST ; Read = GET ; Update = PUT ou PATCH ; Delete = DELETE.</p><p><span class="a">2&nbsp;C</span> 404 Not Found : erreur côté client sur l’URI demandée.</p><p><span class="a">3&nbsp;C</span> A : guillemets simples ; B : virgule finale ; D : clé sans guillemets.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">82</span>
   </footer>
 </section>
@@ -3227,7 +3229,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 </svg><figcaption><b>Fig. 40</b>À gauche, un play qui pousse un serveur NTP au groupe routeurs. À droite, le cycle Terraform : décrire, prévisualiser, appliquer.</figcaption></figure>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">83</span>
   </footer>
 </section>
@@ -3256,7 +3258,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Ansible pousse ses tâches par SSH ou API depuis un nœud de contrôle.</p><p><span class="a">2&nbsp;C</span> plan compare l’état voulu à l’état réel et liste les écarts.</p><p><span class="a">3&nbsp;D</span> Playbooks et inventaires sont en YAML (ou INI pour l’inventaire).</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
-    <span class="brand" data-brand></span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
     <span class="pg">84</span>
   </footer>
 </section>
