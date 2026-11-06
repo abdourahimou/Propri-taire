@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 06/40 — IPv6 : adressage et types</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; color: var(--ink); white-space: nowrap; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.8 · 1.9</span>
+    <span class="num">06<small>/40</small></span>
+  </header>
+  <h1>IPv6 : adressage et types</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Configurer et vérifier un préfixe IPv6 sur une interface, et décrire les adresses GUA, ULA, link-local, anycast, multicast et EUI-64 modifié.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>128 bits en 8 groupes de 16 bits hexadécimaux. Abréviation : zéros de tête supprimés ; une seule suite de groupes nuls remplacée par <code>::</code>. <code>2001:0db8:0000:0000:0000:0a00:0000:0001</code> → <code>2001:db8::a00:0:1</code>.</li>
+<li>Préfixe de site courant /48, sous-réseaux en /64 : l’identifiant d’interface occupe 64 bits. <code>2001:db8::/32</code> est réservé à la documentation.</li>
+<li>GUA (Global Unicast) : <code>2000::/3</code>, routable sur Internet. ULA (Unique Local) : <code>FC00::/7</code>, en pratique <code>FD00::/8</code>, équivalent des adresses privées. Link-local : <code>FE80::/10</code>, automatique sur toute interface IPv6, jamais routée.</li>
+<li>Multicast <code>FF00::/8</code> : <code>FF02::1</code> tous les nœuds, <code>FF02::2</code> tous les routeurs, <code>FF02::1:FF00:0/104</code> solicited-node (NDP). IPv6 n’a pas de broadcast. Anycast : une même adresse unicast sur plusieurs nœuds ; le plus proche répond.</li>
+<li>EUI-64 modifié : MAC coupée en deux, <code>FFFE</code> inséré au milieu, 7<sup>e</sup> bit du premier octet inversé.</li>
+<li>Loopback <code>::1</code>, adresse non spécifiée <code>::</code>. Un routeur ne route IPv6 qu’avec <code>ipv6 unicast-routing</code>.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 47" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Construction EUI-64">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<text x="1" y="5" font-size="2.2" class="t2">MAC (48 bits)</text><g><rect x="30" y="1.5" width="24" height="5" fill="#E9E4D8" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="42" y="4.8" font-size="2.3" text-anchor="middle" class="m">00 1A 2B</text></g><g><rect x="54" y="1.5" width="24" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="66" y="4.8" font-size="2.3" text-anchor="middle" class="m">3C 4D 5E</text></g><text x="1" y="13" font-size="2.2" class="t2">1. Couper en deux</text><g><rect x="30" y="9.5" width="24" height="5" fill="#E9E4D8" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="42" y="12.8" font-size="2.3" text-anchor="middle" class="m">00 1A 2B</text></g><g><rect x="54" y="9.5" width="12" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="60" y="12.8" font-size="2.3" text-anchor="middle" class="m"></text></g><g><rect x="66" y="9.5" width="24" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="78" y="12.8" font-size="2.3" text-anchor="middle" class="m">3C 4D 5E</text></g><text x="1" y="21" font-size="2.2" class="t2">2. Insérer FF FE</text><g><rect x="30" y="17.5" width="24" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="42" y="20.8" font-size="2.3" text-anchor="middle" class="m">00 1A 2B</text></g><g><rect x="54" y="17.5" width="12" height="5" fill="#E9E4D8" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="60" y="20.8" font-size="2.3" text-anchor="middle" class="m" font-weight="600">FF FE</text></g><g><rect x="66" y="17.5" width="24" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="78" y="20.8" font-size="2.3" text-anchor="middle" class="m">3C 4D 5E</text></g><text x="1" y="29" font-size="2.2" class="t2">3. Inverser le 7<tspan baseline-shift="super" font-size="1.5">e</tspan> bit</text><g><rect x="30" y="25.5" width="24" height="5" fill="#E9E4D8" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="42" y="28.8" font-size="2.3" text-anchor="middle" class="m" font-weight="600">02 1A 2B</text></g><g><rect x="54" y="25.5" width="12" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="60" y="28.8" font-size="2.3" text-anchor="middle" class="m">FF FE</text></g><g><rect x="66" y="25.5" width="24" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="78" y="28.8" font-size="2.3" text-anchor="middle" class="m">3C 4D 5E</text></g><text x="30" y="36.6" font-size="2.1" class="m">0x00 = 0000 0000 → 0000 0010 = 0x02</text><text x="93" y="36.6" font-size="2.1" class="acc">bit U/L</text><line x1="1" y1="39" x2="123" y2="39" stroke="#D6D0C4" stroke-width="0.25"/><text x="1" y="42.6" font-size="2.2" class="t2">Résultat</text><text x="30" y="42.6" font-size="2.4" font-weight="600" class="m">2001:db8:acad:1:21a:2bff:fe3c:4d5e</text><text x="30" y="46" font-size="2.2" class="m t2">fe80::21a:2bff:fe3c:4d5e (link-local)</text>
+</svg><figcaption><b>Fig. 06</b>MAC 00:1A:2B:3C:4D:5E sur le préfixe 2001:db8:acad:1::/64. Le même identifiant sert à la link-local automatique.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
+    <span class="pg">15</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.8 · 1.9 — suite</span>
+    <span class="num">06<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">R1(config)#</span> ipv6 unicast-routing</td><td class="role">Active le routage IPv6</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> ipv6 address 2001:db8:acad:1::1/64</td><td class="role">GUA statique</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> ipv6 address 2001:db8:acad:1::/64 eui-64</td><td class="role">Identifiant en EUI-64</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> ipv6 address fe80::1 link-local</td><td class="role">Link-local manuelle</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> ipv6 enable</td><td class="role">Link-local seule, automatique</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ipv6 interface brief</td><td class="role">Adresses et état</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ipv6 interface g0/0/0</td><td class="role">Groupes multicast rejoints</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li><code>::</code> ne s’emploie qu’une fois : <code>2001:db8::1::5</code> est invalide.</li>
+<li>Sans <code>ipv6 unicast-routing</code>, les adresses se configurent, mais le routeur ne route pas et n’émet pas de RA.</li>
+<li>EUI-64 : c’est le 7<sup>e</sup> bit qui s’inverse. <code>00</code> devient <code>02</code>, pas <code>01</code>.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quelle écriture abrège correctement <code>2001:0db8:0000:0000:0001:0000:0000:0010</code> ?<ul class="o"><li><span class="l">A.</span>2001:db8::1::10</li><li><span class="l">B.</span>2001:db8::1:0:0:10</li><li><span class="l">C.</span>2001:db8:0:0:1::1</li><li><span class="l">D.</span>2001:db8::1:10</li></ul></li>
+<li>Quel préfixe identifie une adresse link-local ?<ul class="o four"><li><span class="l">A.</span>FC00::/7</li><li><span class="l">B.</span>FF02::/16</li><li><span class="l">C.</span>2000::/3</li><li><span class="l">D.</span>FE80::/10</li></ul></li>
+<li>MAC <code>0050.56AB.CDEF</code>. Quel identifiant d’interface EUI-64 ?<ul class="o"><li><span class="l">A.</span>0250:56ff:feab:cdef</li><li><span class="l">B.</span>0050:56ff:feab:cdef</li><li><span class="l">C.</span>0250:56fe:ffab:cdef</li><li><span class="l">D.</span>0150:56ff:feab:cdef</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>FE80 : lien · FD : privé · 2 ou 3 : global · FF : multicast.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Un seul :: ; 0010 devient 10 et les autres zéros restent écrits.</p><p><span class="a">2&nbsp;D</span> FE80::/10 : link-local. FC00::/7 : ULA ; 2000::/3 : GUA.</p><p><span class="a">3&nbsp;A</span> FFFE au milieu ; 00 devient 02 par inversion du 7<sup>e</sup> bit.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
+    <span class="pg">16</span>
+  </footer>
+</section>
+</body>
+</html>

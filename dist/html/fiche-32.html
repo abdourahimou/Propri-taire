@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 32/40 — Accès aux équipements : SSH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; color: var(--ink); white-space: nowrap; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">5.0 Security Fundamentals</span>
+    <span class="obj">5.3 · 4.8 · 2.8</span>
+    <span class="num">32<small>/40</small></span>
+  </header>
+  <h1>Accès aux équipements : SSH</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Configurer et vérifier les mots de passe locaux et l’accès distant SSH ; décrire console, Telnet, HTTP(S), TACACS+, RADIUS et gestion cloud.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Modes d’accès : console (hors bande), Telnet (TCP 23, en clair, à proscrire), SSH (TCP 22, chiffré), HTTP et HTTPS (interface web), AAA centralisé (TACACS+, RADIUS), gestion cloud (Meraki).</li>
+<li><code>enable secret</code> : stocké sous forme de hachage. <code>enable password</code> : en clair ou en type 7 ; ignoré dès qu’un <code>enable secret</code> existe.</li>
+<li><code>service password-encryption</code> : convertit en type 7 les mots de passe en clair de la configuration. Le type 7 est réversible : protection contre la lecture par-dessus l’épaule seulement.</li>
+<li>SSH : nom d’hôte autre que Router, nom de domaine, paire de clés RSA (768 bits minimum pour SSHv2, 2048 recommandés), compte local, <code>login local</code> et <code>transport input ssh</code> sur les lignes VTY.</li>
+<li><code>username admin privilege 15 secret …</code> : compte local haché, ouvert directement en mode privilégié.</li>
+<li><code>exec-timeout 10 0</code> : déconnexion après 10 min d’inactivité (valeur par défaut). <code>banner motd</code> : avertissement légal affiché à la connexion.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 44" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Accès de gestion">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<circle cx="62" cy="20" r="5"/>
+<line x1="58.9" y1="16.9" x2="65.1" y2="23.1"/>
+<line x1="58.9" y1="23.1" x2="65.1" y2="16.9"/></g><text x="62" y="12.4" font-size="2.4" text-anchor="middle" font-weight="600">R1</text><text x="68" y="27" font-size="1.9" class="m t2">line vty 0 4</text><text x="56" y="27" font-size="1.9" text-anchor="end" class="m t2">line con 0</text><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="105.6" y="8.2" width="4.8" height="3.2"/>
+<line x1="106.6" y1="12.1" x2="109.4" y2="12.1"/>
+<line x1="108" y1="11.4" x2="108" y2="12.1"/></g><text x="108" y="4.8" font-size="2.3" text-anchor="middle" font-weight="600">Admin</text><line x1="105" y1="11" x2="67" y2="18.6" stroke="#1C1F26" stroke-width="0.3" marker-end="url(#ah)"/><text x="86" y="12.4" font-size="2.1" text-anchor="middle" font-weight="600">SSH · TCP 22 · chiffré</text><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="105.6" y="30.2" width="4.8" height="3.2"/>
+<line x1="106.6" y1="34.1" x2="109.4" y2="34.1"/>
+<line x1="108" y1="33.4" x2="108" y2="34.1"/></g><line x1="105" y1="31" x2="67" y2="22" stroke="#5B6470" stroke-width="0.25" stroke-dasharray="0.8 0.6" marker-end="url(#ah)"/><text x="86" y="31" font-size="2.1" text-anchor="middle" class="t2">Telnet · TCP 23 · en clair</text><line x1="84" y1="24" x2="88" y2="28" stroke="#C8432B" stroke-width="0.5"/><line x1="88" y1="24" x2="84" y2="28" stroke="#C8432B" stroke-width="0.5"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="11.6" y="18.2" width="4.8" height="3.2"/>
+<line x1="12.6" y1="22.1" x2="15.4" y2="22.1"/>
+<line x1="14" y1="21.4" x2="14" y2="22.1"/></g><text x="14" y="14.8" font-size="2.3" text-anchor="middle" font-weight="600">Console</text><line x1="17" y1="20" x2="57" y2="20" stroke="#1C1F26" stroke-width="0.25" stroke-dasharray="0.4 0.4"/><text x="36" y="18.4" font-size="2.1" text-anchor="middle">hors bande, câble console</text><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="60" y="36" width="4" height="6"/>
+<line x1="60.8" y1="37.6" x2="63.2" y2="37.6"/>
+<line x1="60.8" y1="39" x2="63.2" y2="39"/></g><line x1="62" y1="25" x2="62" y2="35.6" stroke="#5B6470" stroke-width="0.25"/><text x="66" y="39" font-size="2.1" font-weight="600">TACACS+ / RADIUS</text><text x="66" y="41.8" font-size="1.9" class="t2">comptes centralisés (fiche 33)</text>
+</svg><figcaption><b>Fig. 32</b>SSH pour l’administration à distance, console pour l’accès de secours. Telnet transmet identifiants et commandes en clair.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
+    <span class="pg">67</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">5.0 Security Fundamentals</span>
+    <span class="obj">5.3 · 4.8 · 2.8 — suite</span>
+    <span class="num">32<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">R1(config)#</span> ip domain name exemple.local</td><td class="role">Nom de domaine (pour les clés)</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> crypto key generate rsa modulus 2048</td><td class="role">Paire de clés RSA</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> ip ssh version 2</td><td class="role">Impose SSHv2</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> username admin privilege 15 secret Adm1n-Lab</td><td class="role">Compte local haché</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> enable secret Ens3cret-Lab</td><td class="role">Mot de passe enable haché</td></tr>
+<tr><td class="c"><span class="p">R1(config-line)#</span> login local</td><td class="role">VTY : comptes locaux</td></tr>
+<tr><td class="c"><span class="p">R1(config-line)#</span> transport input ssh</td><td class="role">VTY : SSH seul</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ip ssh</td><td class="role">Version, délais, état</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ssh</td><td class="role">Sessions SSH ouvertes</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li><code>crypto key generate rsa</code> échoue tant que le nom d’hôte est Router ou que le nom de domaine manque.</li>
+<li><code>login</code> utilise le mot de passe de ligne ; <code>login local</code> utilise les comptes <code>username</code>.</li>
+<li>Le type 7 se déchiffre en quelques secondes : seul <code>secret</code> protège réellement.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quelle commande n’autorise que SSH sur les lignes VTY ?<ul class="o"><li><span class="l">A.</span>transport input ssh</li><li><span class="l">B.</span>ip ssh version 2</li><li><span class="l">C.</span>login local</li><li><span class="l">D.</span>crypto key generate rsa</li></ul></li>
+<li>Que faut-il configurer avant de générer les clés RSA ?<ul class="o"><li><span class="l">A.</span>enable secret</li><li><span class="l">B.</span>Nom d’hôte et nom de domaine</li><li><span class="l">C.</span>transport input ssh</li><li><span class="l">D.</span>Un compte username</li></ul></li>
+<li>Quel stockage protège le moins le mot de passe ?<ul class="o"><li><span class="l">A.</span>enable secret</li><li><span class="l">B.</span>username … secret</li><li><span class="l">C.</span>Type 7 (password-encryption)</li><li><span class="l">D.</span>Hachage scrypt (type 9)</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>Nom, domaine, clés, compte, VTY : cinq étapes pour SSH.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;A</span> transport input limite les protocoles acceptés par la ligne.</p><p><span class="a">2&nbsp;B</span> Le nom de la paire de clés reprend nom d’hôte et domaine.</p><p><span class="a">3&nbsp;C</span> Le type 7 est un encodage réversible, pas un hachage.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
+    <span class="pg">68</span>
+  </footer>
+</section>
+</body>
+</html>

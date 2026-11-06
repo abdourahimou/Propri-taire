@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 14/40 — Rapid PVST+ : élection et rôles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; color: var(--ink); white-space: nowrap; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">2.0 Network Access</span>
+    <span class="obj">2.5</span>
+    <span class="num">14<small>/40</small></span>
+  </header>
+  <h1>Rapid PVST+ : élection et rôles</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Interpréter le fonctionnement de Rapid PVST+ : élection du root bridge, choix des root ports, rôles et états des ports.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>STP supprime les boucles de couche 2 (tempêtes de broadcast, table MAC instable, trames dupliquées) en bloquant les ports redondants. Rapid PVST+ : une instance RSTP (802.1w) par VLAN.</li>
+<li>Bridge ID = priorité (32768 par défaut) + extended system ID (numéro de VLAN) + MAC. VLAN 10 : 32768 + 10 = 32778. La priorité se règle par pas de 4096. Le plus petit BID devient root bridge.</li>
+<li>Root port (RP) : sur chaque switch non root, le port au plus faible coût cumulé vers le root. Départage : coût, puis BID du voisin, puis priorité de port du voisin (128 par défaut), puis numéro de port du voisin.</li>
+<li>Coûts par défaut : 10 Mbit/s = 100, 100 Mbit/s = 19, 1 Gbit/s = 4, 10 Gbit/s = 2.</li>
+<li>Designated port (DP) : un par segment, côté du meilleur chemin vers le root ; tous les ports du root sont DP. Les autres sont alternate (secours du RP) ou backup (secours d’un DP sur le même segment), en discarding.</li>
+<li>États RSTP : discarding, learning, forwarding. Convergence rapide par échange proposition / accord sur les liens point à point. Timers : hello 2 s, max age 20 s, forward delay 15 s.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 45" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Élection Rapid PVST+">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<line x1="58" y1="13" x2="26" y2="31" stroke="#1C1F26" stroke-width="0.25"/><line x1="66" y1="13" x2="98" y2="31" stroke="#1C1F26" stroke-width="0.25"/><line x1="29" y1="34" x2="95" y2="34" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="55" y="7" width="14" height="6" fill="#F4F1EA"/>
+<line x1="57" y1="9" x2="67" y2="9" marker-end="url(#ah)"/>
+<line x1="67" y1="11" x2="57" y2="11" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="15" y="31" width="14" height="6" fill="#F4F1EA"/>
+<line x1="17" y1="33" x2="27" y2="33" marker-end="url(#ah)"/>
+<line x1="27" y1="35" x2="17" y2="35" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="95" y="31" width="14" height="6" fill="#F4F1EA"/>
+<line x1="97" y1="33" x2="107" y2="33" marker-end="url(#ah)"/>
+<line x1="107" y1="35" x2="97" y2="35" marker-end="url(#ah)"/></g><text x="62" y="5.4" font-size="2.4" text-anchor="middle" font-weight="600">SW1 · root bridge</text><text x="70.6" y="10.8" font-size="1.9" class="m t2">BID 24586 · 0011.1111.1111</text><text x="22" y="40" font-size="2.4" text-anchor="middle" font-weight="600">SW2</text><text x="22" y="43" font-size="1.9" text-anchor="middle" class="m t2">BID 32778 · 0022.2222.2222</text><text x="102" y="40" font-size="2.4" text-anchor="middle" font-weight="600">SW3</text><text x="102" y="43" font-size="1.9" text-anchor="middle" class="m t2">BID 32778 · 0033.3333.3333</text><text x="51" y="13.4" font-size="2.2" text-anchor="middle" font-weight="600">DP</text><text x="73" y="13.4" font-size="2.2" text-anchor="middle" font-weight="600">DP</text><text x="29" y="27.2" font-size="2.2" text-anchor="middle" font-weight="600">RP</text><text x="95" y="27.2" font-size="2.2" text-anchor="middle" font-weight="600">RP</text><text x="33" y="37.6" font-size="2.2" text-anchor="middle" font-weight="600">DP</text><text x="90" y="37.6" font-size="2.2" text-anchor="middle" font-weight="600" class="acc">ALT</text><line x1="87.4" y1="31.6" x2="87.4" y2="36.4" stroke="#C8432B" stroke-width="0.6"/><text x="62" y="32.4" font-size="2" text-anchor="middle" class="t2">coût 4 par lien (1 Gbit/s)</text><text x="37" y="22" font-size="2" text-anchor="end" class="t2">coût 4</text><text x="87" y="22" font-size="2" class="t2">coût 4</text>
+</svg><figcaption><b>Fig. 14</b>SW1 (priorité 24576 + 10) est root. Sur le lien SW2–SW3, SW2 l’emporte par sa MAC plus faible : son port est DP, celui de SW3 est alternate.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
+    <span class="pg">31</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">2.0 Network Access</span>
+    <span class="obj">2.5 — suite</span>
+    <span class="num">14<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">SW1(config)#</span> spanning-tree mode rapid-pvst</td><td class="role">Active Rapid PVST+</td></tr>
+<tr><td class="c"><span class="p">SW1(config)#</span> spanning-tree vlan 10 root primary</td><td class="role">Priorité 24576 ou moins</td></tr>
+<tr><td class="c"><span class="p">SW2(config)#</span> spanning-tree vlan 10 root secondary</td><td class="role">Priorité 28672</td></tr>
+<tr><td class="c"><span class="p">SW1(config)#</span> spanning-tree vlan 10 priority 4096</td><td class="role">Priorité fixée (multiple de 4096)</td></tr>
+<tr><td class="c"><span class="p">SW3(config-if)#</span> spanning-tree vlan 10 cost 10</td><td class="role">Coût du port</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show spanning-tree vlan 10</td><td class="role">Root, rôles, états, coûts</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show spanning-tree root</td><td class="role">Root de chaque VLAN</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Le root bridge est le plus petit BID, pas la plus haute priorité ni le switch le plus récent.</li>
+<li><code>spanning-tree vlan 10 priority 30000</code> est refusé : la priorité est un multiple de 4096.</li>
+<li>Le root bridge n’a aucun root port : tous ses ports sont designated.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Priorité laissée par défaut : quelle valeur affiche <code>show spanning-tree vlan 20</code> ?<ul class="o four"><li><span class="l">A.</span>32768</li><li><span class="l">B.</span>32788</li><li><span class="l">C.</span>32748</li><li><span class="l">D.</span>4096</li></ul></li>
+<li>Priorités par défaut ; MAC : SW1 0011.0000.0003, SW2 0011.0000.0001, SW3 0011.0000.0002. Quel switch est root ?<ul class="o"><li><span class="l">A.</span>SW3</li><li><span class="l">B.</span>SW1</li><li><span class="l">C.</span>SW2</li><li><span class="l">D.</span>Le premier démarré</li></ul></li>
+<li>Quel rôle RSTP désigne le port de secours du root port ?<ul class="o four"><li><span class="l">A.</span>Designated</li><li><span class="l">B.</span>Backup</li><li><span class="l">C.</span>Disabled</li><li><span class="l">D.</span>Alternate</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>Root : le plus petit BID. RP : le chemin le moins cher vers lui. DP : un par segment.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> 32768 + extended system ID 20 = 32788.</p><p><span class="a">2&nbsp;C</span> Priorités égales : la plus petite MAC l’emporte.</p><p><span class="a">3&nbsp;D</span> Alternate : autre chemin vers le root. Backup : secours d’un DP sur le même segment.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
+    <span class="pg">32</span>
+  </footer>
+</section>
+</body>
+</html>

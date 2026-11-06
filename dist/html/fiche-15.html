@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 15/40 — Rapid PVST+ : PortFast et protections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; color: var(--ink); white-space: nowrap; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">2.0 Network Access</span>
+    <span class="obj">2.5</span>
+    <span class="num">15<small>/40</small></span>
+  </header>
+  <h1>Rapid PVST+ : PortFast et protections</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Interpréter PortFast, BPDU Guard, BPDU Filter, Root Guard et Loop Guard, et leur effet sur l’état des ports.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>PortFast : port d’accès vers un terminal, mis en forwarding immédiatement ; RSTP le traite en edge port. STP reste actif sur le port. Jamais vers un switch.</li>
+<li>BPDU Guard : tout BPDU reçu met le port en err-disabled. À associer à PortFast sur les ports utilisateurs ; en global, <code>spanning-tree portfast bpduguard default</code> couvre tous les ports PortFast.</li>
+<li>BPDU Filter : plus d’émission de BPDU. En global, un BPDU reçu retire le statut PortFast au port. Par interface, il ignore tout BPDU reçu ou émis, ce qui peut créer une boucle.</li>
+<li>Root Guard : sur les DP qui ne doivent jamais mener au root. Un BPDU supérieur reçu place le port en root-inconsistent (bloqué) ; il se rétablit seul quand ces BPDU cessent.</li>
+<li>Loop Guard : sur les root ports et ports alternate. Si les BPDU cessent (lien unidirectionnel), le port passe en loop-inconsistent au lieu de devenir designated.</li>
+<li>Sortie d’err-disabled : <code>shutdown</code> puis <code>no shutdown</code>, ou <code>errdisable recovery cause bpduguard</code> (300 s par défaut).</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 46" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Protections STP">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<g stroke="#1C1F26" stroke-width="0.25">
+<rect x="55" y="4" width="14" height="6" fill="#F4F1EA"/>
+<line x1="57" y1="6" x2="67" y2="6" marker-end="url(#ah)"/>
+<line x1="67" y1="8" x2="57" y2="8" marker-end="url(#ah)"/></g><text x="70.5" y="6" font-size="2.3" font-weight="600">SW1 · distribution, root</text><line x1="62" y1="10" x2="62" y2="23" stroke="#1C1F26" stroke-width="0.25"/><text x="63.4" y="13.4" font-size="2" class="m">g0/2 : Root Guard</text><text x="63.4" y="21.4" font-size="2" class="m">g0/1 : Loop Guard (RP)</text><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="55" y="23" width="14" height="6" fill="#F4F1EA"/>
+<line x1="57" y1="25" x2="67" y2="25" marker-end="url(#ah)"/>
+<line x1="67" y1="27" x2="57" y2="27" marker-end="url(#ah)"/></g><text x="70.5" y="27" font-size="2.3" font-weight="600">SW2 · accès</text><line x1="57" y1="29" x2="30" y2="37" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="23.6" y="37.7" width="4.8" height="3.2"/>
+<line x1="24.6" y1="41.6" x2="27.4" y2="41.6"/>
+<line x1="26" y1="40.9" x2="26" y2="41.6"/></g><text x="20" y="38" font-size="2" text-anchor="end" class="m">g0/10 · PC</text><text x="20" y="41" font-size="2.1" text-anchor="end">PortFast + BPDU Guard</text><text x="20" y="44" font-size="2" text-anchor="end" class="t2">forwarding immédiat</text><line x1="67" y1="29" x2="87" y2="37" stroke="#C8432B" stroke-width="0.3"/><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="86.5" y="37" width="11" height="5" fill="#F4F1EA"/>
+<line x1="88.5" y1="38.5" x2="95.5" y2="38.5" marker-end="url(#ah)"/>
+<line x1="95.5" y1="40.5" x2="88.5" y2="40.5" marker-end="url(#ah)"/></g><text x="99" y="38" font-size="2.1">g0/11 · switch ajouté</text><text x="99" y="41" font-size="2.1" class="acc">BPDU reçu</text><text x="99" y="44" font-size="2.1" font-weight="600" class="acc">→ err-disabled</text><line x1="75" y1="30.6" x2="79" y2="34.2" stroke="#C8432B" stroke-width="0.5"/><line x1="79" y1="30.6" x2="75" y2="34.2" stroke="#C8432B" stroke-width="0.5"/>
+</svg><figcaption><b>Fig. 15</b>Root Guard protège le root depuis la distribution ; Loop Guard surveille le root port de l’accès ; BPDU Guard coupe le port où un switch a été branché.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
+    <span class="pg">33</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">2.0 Network Access</span>
+    <span class="obj">2.5 — suite</span>
+    <span class="num">15<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">SW2(config-if)#</span> spanning-tree portfast</td><td class="role">PortFast sur le port</td></tr>
+<tr><td class="c"><span class="p">SW2(config-if)#</span> spanning-tree bpduguard enable</td><td class="role">BPDU Guard sur le port</td></tr>
+<tr><td class="c"><span class="p">SW2(config)#</span> spanning-tree portfast bpduguard default</td><td class="role">BPDU Guard sur ports PortFast</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> spanning-tree guard root</td><td class="role">Root Guard</td></tr>
+<tr><td class="c"><span class="p">SW2(config-if)#</span> spanning-tree guard loop</td><td class="role">Loop Guard</td></tr>
+<tr><td class="c"><span class="p">SW2(config)#</span> errdisable recovery cause bpduguard</td><td class="role">Réactivation automatique</td></tr>
+<tr class="show"><td class="c"><span class="p">SW2#</span> show interfaces status err-disabled</td><td class="role">Ports en err-disabled</td></tr>
+<tr class="show"><td class="c"><span class="p">SW2#</span> show spanning-tree interface g0/10 detail</td><td class="role">PortFast, BPDU Guard, BPDU</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>PortFast ne désactive pas STP : il supprime seulement l’attente avant forwarding.</li>
+<li>Root Guard bloque tant que des BPDU supérieurs arrivent ; BPDU Guard met le port en err-disabled au premier BPDU.</li>
+<li>Sans <code>errdisable recovery</code>, un port err-disabled exige <code>shutdown</code> puis <code>no shutdown</code>.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Un utilisateur branche un switch sur un port en PortFast avec BPDU Guard. État du port ?<ul class="o"><li><span class="l">A.</span>Forwarding</li><li><span class="l">B.</span>Root-inconsistent</li><li><span class="l">C.</span>Err-disabled</li><li><span class="l">D.</span>Blocking</li></ul></li>
+<li>Quelle protection met un port en root-inconsistent à la réception d’un BPDU supérieur ?<ul class="o four"><li><span class="l">A.</span>Root Guard</li><li><span class="l">B.</span>BPDU Guard</li><li><span class="l">C.</span>Loop Guard</li><li><span class="l">D.</span>PortFast</li></ul></li>
+<li>Quelle fonction empêche un port alternate de passer en forwarding quand les BPDU cessent ?<ul class="o four"><li><span class="l">A.</span>BPDU Filter</li><li><span class="l">B.</span>Root Guard</li><li><span class="l">C.</span>PortFast</li><li><span class="l">D.</span>Loop Guard</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>BPDU Guard coupe, Root Guard bloque, Loop Guard retient.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Le switch ajouté émet des BPDU : BPDU Guard désactive le port.</p><p><span class="a">2&nbsp;A</span> Root Guard refuse qu’un root apparaisse derrière ce port.</p><p><span class="a">3&nbsp;D</span> Loop Guard place le port en loop-inconsistent au lieu de le débloquer.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand>Seidou Hama Abdou Rahimou</span>
+    <span class="pg">34</span>
+  </footer>
+</section>
+</body>
+</html>
