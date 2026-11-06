@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap">
 <style>
 /* Charte — Fiches CCNA 200-301 */
 :root {
@@ -339,8 +340,6 @@ svg .m { font-family: var(--f-mono); }
 svg .t2 { fill: var(--ink-2); }
 svg .acc { fill: var(--accent); }
 
-/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
-.ar { font-family: var(--f-mono); font-size: 0.9em; }
 sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 
 </style>
@@ -357,7 +356,7 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
   <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Configurer et vérifier OSPFv2 dans une zone unique : activation sur les interfaces, router ID, interfaces passives et propagation de la route par défaut.</p></div>
   <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li><code>router ospf 1</code> : le process ID (1 à 65535) est local au routeur et peut différer entre voisins. L’area ID, lui, doit correspondre ; en zone unique, utiliser l’area 0 (backbone). Distance administrative : 110.</li>
 <li><code>network 10.0.12.0 0.0.0.3 area 0</code> active OSPF sur toute interface dont l’adresse correspond. Le préfixe annoncé est celui de l’interface, pas celui de la commande. Variante : <code>ip ospf 1 area 0</code> sur l’interface.</li>
-<li>Wildcard mask (masque générique) = 255.255.255.255 – masque : /30 <span class="ar">→</span> <code>0.0.0.3</code>, /24 <span class="ar">→</span> <code>0.0.0.255</code>. <code>0.0.0.0</code> cible une seule adresse d’interface.</li>
+<li>Wildcard mask (masque générique) = 255.255.255.255 – masque : /30 → <code>0.0.0.3</code>, /24 → <code>0.0.0.255</code>. <code>0.0.0.0</code> cible une seule adresse d’interface.</li>
 <li>Router ID (identifiant 32 bits, unique) : <code>router-id</code> manuel, sinon plus haute IP de loopback active, sinon plus haute IP d’interface active. Un nouveau RID n’est appliqué qu’après <code>clear ip ospf process</code> ou redémarrage.</li>
 <li><code>passive-interface</code> : le réseau de l’interface reste annoncé, mais aucun Hello n’est émis, donc aucun voisin ne s’y forme. À utiliser vers les LAN d’utilisateurs.</li>
 <li>Coût = bande passante de référence ÷ bande passante de l’interface. Référence par défaut : 100 Mbit/s, donc FastEthernet, GigabitEthernet et 10 GbE coûtent tous 1. <code>auto-cost reference-bandwidth</code> doit être identique sur tous les routeurs.</li></ol></section>

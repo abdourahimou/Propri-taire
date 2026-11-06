@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 35/40 — Sécurité L2 : port security, snooping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">5.0 Security Fundamentals</span>
+    <span class="obj">5.7</span>
+    <span class="num">35<small>/40</small></span>
+  </header>
+  <h1>Sécurité L2 : port security, snooping</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Configurer et vérifier la sécurité de couche 2 : port security, DHCP snooping et Dynamic ARP Inspection.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Port security : limite le nombre d’adresses MAC sources sur un port (1 par défaut). Apprentissage statique, dynamique ou sticky (MAC apprises inscrites dans la running-config). Le port doit être en access ou trunk fixe.</li>
+<li>Violation : shutdown (défaut : port err-disabled), restrict (trames rejetées, journal et compteur), protect (trames rejetées sans journal ni compteur).</li>
+<li>DHCP snooping : ports untrusted par défaut. Un message serveur (Offer, Ack) reçu sur un port untrusted est rejeté, ce qui neutralise les serveurs DHCP pirates. Le switch tient une table de liaisons : MAC, IP, VLAN, port, bail.</li>
+<li>Option 82 : insérée par défaut par le switch ; un serveur DHCP IOS peut alors refuser la requête. <code>no ip dhcp snooping information option</code> la désactive.</li>
+<li>DAI (Dynamic ARP Inspection) : sur les ports untrusted, chaque ARP est comparé à la table du snooping ; les associations IP-MAC falsifiées (ARP spoofing) sont rejetées. Limite par défaut : 15 ARP/s par port untrusted.</li>
+<li>Ordre : DHCP snooping (global et par VLAN), ports trusted (uplinks, serveur), puis DAI sur les mêmes VLAN avec <code>ip arp inspection trust</code> sur les uplinks.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 43" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sécurité de couche 2">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<g stroke="#1C1F26" stroke-width="0.25">
+<rect x="54" y="16.5" width="16" height="7" fill="#F4F1EA"/>
+<line x1="56" y1="19" x2="68" y2="19" marker-end="url(#ah)"/>
+<line x1="68" y1="21" x2="56" y2="21" marker-end="url(#ah)"/></g><text x="71.5" y="17.6" font-size="2.3" font-weight="600">SW1 · VLAN 10</text><line x1="62" y1="16.5" x2="62" y2="7.5" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="60" y="1.2" width="4" height="6"/>
+<line x1="60.8" y1="2.8" x2="63.2" y2="2.8"/>
+<line x1="60.8" y1="4.2" x2="63.2" y2="4.2"/></g><text x="66" y="4.4" font-size="2.1" font-weight="600">Serveur DHCP légitime</text><text x="63.4" y="12" font-size="1.9" class="m">g0/1 · trusted</text><line x1="54" y1="22" x2="20" y2="33.4" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="13.6" y="34.2" width="4.8" height="3.2"/>
+<line x1="14.6" y1="38.1" x2="17.4" y2="38.1"/>
+<line x1="16" y1="37.4" x2="16" y2="38.1"/></g><text x="16" y="41.4" font-size="2.2" text-anchor="middle" font-weight="600">PC</text><text x="2" y="26" font-size="1.9" class="m">g0/5 · untrusted</text><text x="2" y="29" font-size="1.9" class="t2">port-security max 2, sticky</text><line x1="62" y1="23.5" x2="62" y2="33" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="60" y="33.4" width="4" height="6"/>
+<line x1="60.8" y1="35" x2="63.2" y2="35"/>
+<line x1="60.8" y1="36.4" x2="63.2" y2="36.4"/></g><text x="66" y="36.6" font-size="2.1" font-weight="600">DHCP pirate</text><text x="66" y="39.4" font-size="2" class="acc">Offer rejeté (untrusted)</text><line x1="60" y1="27" x2="64" y2="31" stroke="#C8432B" stroke-width="0.5"/><line x1="64" y1="27" x2="60" y2="31" stroke="#C8432B" stroke-width="0.5"/><line x1="70" y1="22" x2="104" y2="33.4" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="105.6" y="34.2" width="4.8" height="3.2"/>
+<line x1="106.6" y1="38.1" x2="109.4" y2="38.1"/>
+<line x1="108" y1="37.4" x2="108" y2="38.1"/></g><text x="108" y="41.4" font-size="2.2" text-anchor="middle" font-weight="600">Attaquant</text><text x="122" y="26" font-size="2" text-anchor="end" class="acc">ARP falsifié</text><text x="122" y="29" font-size="2" text-anchor="end" class="acc">rejeté par DAI</text><line x1="85" y1="26.2" x2="89" y2="30.2" stroke="#C8432B" stroke-width="0.5"/><line x1="89" y1="26.2" x2="85" y2="30.2" stroke="#C8432B" stroke-width="0.5"/>
+</svg><figcaption><b>Fig. 35</b>Seul le port g0/1 peut émettre des réponses DHCP. DAI s’appuie sur la table construite par le snooping pour valider chaque ARP.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">73</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">5.0 Security Fundamentals</span>
+    <span class="obj">5.7 — suite</span>
+    <span class="num">35<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">SW1(config-if)#</span> switchport port-security</td><td class="role">Active port security</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> switchport port-security maximum 2</td><td class="role">Deux MAC autorisées</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> switchport port-security mac-address sticky</td><td class="role">MAC apprises mémorisées</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> switchport port-security violation restrict</td><td class="role">Rejet + journal</td></tr>
+<tr><td class="c"><span class="p">SW1(config)#</span> ip dhcp snooping vlan 10</td><td class="role">Snooping sur le VLAN 10 (avec ip dhcp snooping)</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> ip dhcp snooping trust</td><td class="role">Port vers le vrai serveur</td></tr>
+<tr><td class="c"><span class="p">SW1(config)#</span> ip arp inspection vlan 10</td><td class="role">DAI sur le VLAN 10</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show port-security interface g0/5</td><td class="role">Mode, MAC, violations</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show ip dhcp snooping binding</td><td class="role">Table de liaisons</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Port security sur un port en dynamic auto : commande refusée ; le port doit être access ou trunk.</li>
+<li>Le mode protect ne journalise rien et ne compte rien : les violations passent inaperçues.</li>
+<li>DAI sans DHCP snooping ni ACL ARP : tous les ARP des ports untrusted sont rejetés.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quel est le mode de violation par défaut de port security ?<ul class="o four"><li><span class="l">A.</span>protect</li><li><span class="l">B.</span>restrict</li><li><span class="l">C.</span>shutdown</li><li><span class="l">D.</span>drop</li></ul></li>
+<li>Où placer <code>ip dhcp snooping trust</code> ?<ul class="o"><li><span class="l">A.</span>Sur tous les ports d’accès</li><li><span class="l">B.</span>Vers le serveur DHCP légitime</li><li><span class="l">C.</span>Sur aucun port</li><li><span class="l">D.</span>Sur la SVI</li></ul></li>
+<li>Quelle fonction bloque une attaque par ARP spoofing ?<ul class="o"><li><span class="l">A.</span>Port security</li><li><span class="l">B.</span>BPDU Guard</li><li><span class="l">C.</span>DHCP snooping seul</li><li><span class="l">D.</span>DAI</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>Snooping d’abord : DAI lit sa table.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> shutdown met le port en err-disabled.</p><p><span class="a">2&nbsp;B</span> Seuls les ports menant au vrai serveur doivent accepter Offer et Ack.</p><p><span class="a">3&nbsp;D</span> DAI valide chaque ARP ; le snooping ne fait que fournir la table.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">74</span>
+  </footer>
+</section>
+</body>
+</html>

@@ -329,6 +329,4 @@ svg .m { font-family: var(--f-mono); }
 svg .t2 { fill: var(--ink-2); }
 svg .acc { fill: var(--accent); }
 
-/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
-.ar { font-family: var(--f-mono); font-size: 0.9em; }
 sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }

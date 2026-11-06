@@ -7,6 +7,12 @@ const FONTS =
   'https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700' +
   '&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400' +
   '&family=JetBrains+Mono:wght@400;600&display=swap';
+// Symboles absents du sous-ensemble latin servi par défaut (→ ↔ ≈ ☑ ☐) :
+// même familles, limitées à ces caractères (Google ajoute l'unicode-range).
+const FONTS_SYMBOLS =
+  'https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700' +
+  '&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600' +
+  '&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap';
 
 const TOTAL = 40;
 const FRONT_PAGES = 4; // couverture, mode d'emploi, sommaire (2 pages)
@@ -26,7 +32,6 @@ function typo(html) {
         .replace(/ ([;!?])/g, NNBSP + '$1')
         .replace(/« /g, '«' + NNBSP)
         .replace(/ »/g, NNBSP + '»')
-        .replace(/→/g, '<span class="ar">→</span>')
         .replace(/ᵉ/g, '<sup>e</sup>')
         .replace(/⁶/g, '<sup>6</sup>');
     })
@@ -106,6 +111,7 @@ function render(f) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="${FONTS}">
+<link rel="stylesheet" href="${FONTS_SYMBOLS}">
 <style>
 ${CSS}
 </style>
@@ -116,4 +122,4 @@ ${typo(body)}
 </html>`;
 }
 
-module.exports = { render, typo, TOTAL, FRONT_PAGES, FONTS, CSS };
+module.exports = { render, typo, TOTAL, FRONT_PAGES, FONTS, FONTS_SYMBOLS, CSS };

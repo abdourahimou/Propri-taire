@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap">
 <style>
 /* Charte — Fiches CCNA 200-301 */
 :root {
@@ -339,8 +340,6 @@ svg .m { font-family: var(--f-mono); }
 svg .t2 { fill: var(--ink-2); }
 svg .acc { fill: var(--accent); }
 
-/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
-.ar { font-family: var(--f-mono); font-size: 0.9em; }
 sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 
 </style>
@@ -356,7 +355,7 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
   <h1>IPv4 : sous-réseaux et adressage privé</h1>
   <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Configurer et vérifier l’adressage IPv4 d’une interface et d’un poste client, découper un bloc en sous-réseaux et identifier les plages privées.</p></div>
   <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Préfixe /n : n bits réseau, h = 32 – n bits hôtes. Hôtes utilisables : 2<sup>h</sup> – 2, adresse réseau et broadcast (diffusion) exclues. Exception : /31 sur lien point à point (RFC 3021).</li>
-<li>Pas du découpage = 256 – valeur de l’octet du masque. /27 <span class="ar">→</span> 255.255.255.224 <span class="ar">→</span> pas de 32 : sous-réseaux .0, .32, .64, .96…<table class="ref"><tbody><tr><th>Préfixe</th><td>/25</td><td>/26</td><td>/27</td><td>/28</td><td>/29</td><td>/30</td></tr><tr><th>4<sup>e</sup> octet</th><td>128</td><td>192</td><td>224</td><td>240</td><td>248</td><td>252</td></tr><tr><th>Pas</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td></tr><tr><th>Hôtes</th><td>126</td><td>62</td><td>30</td><td>14</td><td>6</td><td>2</td></tr></tbody></table></li>
+<li>Pas du découpage = 256 – valeur de l’octet du masque. /27 → 255.255.255.224 → pas de 32 : sous-réseaux .0, .32, .64, .96…<table class="ref"><tbody><tr><th>Préfixe</th><td>/25</td><td>/26</td><td>/27</td><td>/28</td><td>/29</td><td>/30</td></tr><tr><th>4<sup>e</sup> octet</th><td>128</td><td>192</td><td>224</td><td>240</td><td>248</td><td>252</td></tr><tr><th>Pas</th><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td></tr><tr><th>Hôtes</th><td>126</td><td>62</td><td>30</td><td>14</td><td>6</td><td>2</td></tr></tbody></table></li>
 <li>VLSM (Variable Length Subnet Mask, masque de longueur variable) : allouer les besoins par taille décroissante, chaque bloc commençant sur un multiple de sa taille.</li>
 <li>Plages privées RFC 1918, non routées sur Internet (NAT requis) : <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code>. Distinctes de <code>169.254.0.0/16</code> (APIPA, auto-attribuée sans DHCP) et de <code>127.0.0.0/8</code> (loopback).</li>
 <li>Poste client, vérifier adresse, masque, passerelle et DNS : Windows <code>ipconfig /all</code> ; Linux <code>ip addr</code>, <code>ip route</code> ; macOS <code>ifconfig</code>, <code>netstat -rn</code>.</li></ol></section>

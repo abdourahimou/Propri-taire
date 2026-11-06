@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&text=%E2%86%92%E2%86%94%E2%89%88%E2%98%91%E2%98%90&display=swap">
 <style>
 /* Charte — Fiches CCNA 200-301 */
 :root {
@@ -339,8 +340,6 @@ svg .m { font-family: var(--f-mono); }
 svg .t2 { fill: var(--ink-2); }
 svg .acc { fill: var(--accent); }
 
-/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
-.ar { font-family: var(--f-mono); font-size: 0.9em; }
 sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 
 </style>
@@ -355,7 +354,7 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
   </header>
   <h1>IPv6 : adressage et types</h1>
   <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Configurer et vérifier un préfixe IPv6 sur une interface, et décrire les adresses GUA, ULA, link-local, anycast, multicast et EUI-64 modifié.</p></div>
-  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>128 bits en 8 groupes de 16 bits hexadécimaux. Abréviation : zéros de tête supprimés ; une seule suite de groupes nuls remplacée par <code>::</code>. <code>2001:0db8:0000:0000:0000:0a00:0000:0001</code> <span class="ar">→</span> <code>2001:db8::a00:0:1</code>.</li>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>128 bits en 8 groupes de 16 bits hexadécimaux. Abréviation : zéros de tête supprimés ; une seule suite de groupes nuls remplacée par <code>::</code>. <code>2001:0db8:0000:0000:0000:0a00:0000:0001</code> → <code>2001:db8::a00:0:1</code>.</li>
 <li>Préfixe de site courant /48, sous-réseaux en /64 : l’identifiant d’interface occupe 64 bits. <code>2001:db8::/32</code> est réservé à la documentation.</li>
 <li>GUA (Global Unicast) : <code>2000::/3</code>, routable sur Internet. ULA (Unique Local) : <code>FC00::/7</code>, en pratique <code>FD00::/8</code>, équivalent des adresses privées. Link-local : <code>FE80::/10</code>, automatique sur toute interface IPv6, jamais routée.</li>
 <li>Multicast <code>FF00::/8</code> : <code>FF02::1</code> tous les nœuds, <code>FF02::2</code> tous les routeurs, <code>FF02::1:FF00:0/104</code> solicited-node (NDP). IPv6 n’a pas de broadcast. Anycast : une même adresse unicast sur plusieurs nœuds ; le plus proche répond.</li>
