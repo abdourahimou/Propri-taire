@@ -33,10 +33,15 @@ const PNG_DIR = process.env.PNG_DIR; // aperçus facultatifs
     // Contrôle : aucun débordement de contenu hors de la page A5.
     const over = await page.evaluate(() =>
       [...document.querySelectorAll('.page')].map((p, i) => {
-        const limit = p.getBoundingClientRect().bottom - 13 * 3.7795; // marge basse 13 mm
-        const last = [...p.children].filter((c) => !c.classList.contains('foot'));
-        const bottom = Math.max(...last.map((c) => c.getBoundingClientRect().bottom));
-        return { page: i + 1, spare_mm: +((limit - bottom) / 3.7795).toFixed(1) };
+        const mm = 3.7795;
+        const limit = p.getBoundingClientRect().bottom - 13 * mm; // marge basse 13 mm
+        const kids = [...p.children].filter((c) => !c.classList.contains('foot'));
+        const bottom = Math.max(...kids.map((c) => c.getBoundingClientRect().bottom));
+        // Blanc réellement disponible : espace absorbé par l'élément en margin-top:auto.
+        const auto = kids.find((c) => c.matches('figure.schema, .reponses'));
+        const prev = auto && auto.previousElementSibling;
+        const slack = prev ? auto.getBoundingClientRect().top - prev.getBoundingClientRect().bottom - parseFloat(getComputedStyle(prev).marginBottom) : 0;
+        return { page: i + 1, spare_mm: +((limit - bottom) / mm).toFixed(1), slack_mm: +(slack / mm).toFixed(1) };
       })
     );
     const fonts = await page.evaluate(() =>
@@ -45,7 +50,7 @@ const PNG_DIR = process.env.PNG_DIR; // aperçus facultatifs
     for (const o of over) {
       const flag = o.spare_mm < 0 ? '  <-- DÉBORDEMENT' : '';
       if (o.spare_mm < 0) failed = true;
-      console.log(`${name} p${o.page} : marge libre ${o.spare_mm} mm${flag}`);
+      console.log(`${name} p${o.page} : blanc ${o.slack_mm} mm${flag}`);
     }
     console.log(`  polices : ${[...new Set(fonts)].join(', ')}`);
 

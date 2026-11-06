@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 02/40 — Topologies, cloud et virtualisation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.2 · 1.12</span>
+    <span class="num">02<small>/40</small></span>
+  </header>
+  <h1>Topologies, cloud et virtualisation</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Décrire les architectures 2-tier, 3-tier, spine-leaf, WAN, SOHO, on-premise et cloud, et expliquer la virtualisation des serveurs, les conteneurs et les VRF.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>3-tier (trois niveaux) : accès (terminaux, PoE, sécurité des ports), distribution (routage inter-VLAN, politiques, agrégation), cœur (core : transport rapide entre blocs, sans filtrage). 2-tier (collapsed core) : cœur et distribution fusionnés.</li>
+<li>Spine-leaf : chaque leaf est relié à chaque spine, jamais leaf à leaf ni spine à spine. Entre deux serveurs : leaf, spine, leaf. Latence prévisible pour le trafic est-ouest ; ajouter un spine augmente la capacité.</li>
+<li>WAN : relie des sites distants (MPLS, Metro Ethernet, Internet + VPN) en point à point, hub-and-spoke ou full mesh. SOHO (Small Office / Home Office) : un seul boîtier fait routeur, switch, AP et pare-feu.</li>
+<li>On-premise : infrastructure possédée et exploitée sur site. Cloud : services IaaS, PaaS, SaaS ; déploiement public, privé, hybride ou communautaire.</li>
+<li>Hyperviseur type 1 (bare-metal : ESXi, Hyper-V) ou type 2 (hébergé : VirtualBox) : exécute des VM, chacune avec son OS ; un vSwitch relie les vNIC au réseau. Conteneur (Docker) : partage le noyau de l’hôte, plus léger qu’une VM.</li>
+<li>VRF (Virtual Routing and Forwarding) : plusieurs tables de routage isolées sur un même routeur. Un même préfixe peut exister dans deux VRF sans conflit.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 45" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Architectures 3-tier et spine-leaf">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<text x="30" y="3.4" font-size="2.3" text-anchor="middle" font-weight="600">3-TIER (CAMPUS)</text><line x1="18" y1="11" x2="30" y2="11" stroke="#1C1F26" stroke-width="0.25"/><line x1="14" y1="13.1" x2="8" y2="20.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="14" y1="13.1" x2="40" y2="20.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="34" y1="13.1" x2="8" y2="20.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="34" y1="13.1" x2="40" y2="20.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="12" y1="23" x2="36" y2="23" stroke="#1C1F26" stroke-width="0.25"/><line x1="8" y1="25.1" x2="5" y2="32.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="8" y1="25.1" x2="24" y2="32.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="8" y1="25.1" x2="43" y2="32.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="40" y1="25.1" x2="5" y2="32.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="40" y1="25.1" x2="24" y2="32.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="40" y1="25.1" x2="43" y2="32.9" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="10" y="8.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="12" y1="10" x2="16" y2="10" marker-end="url(#ah)"/>
+<line x1="16" y1="12" x2="12" y2="12" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="30" y="8.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="32" y1="10" x2="36" y2="10" marker-end="url(#ah)"/>
+<line x1="36" y1="12" x2="32" y2="12" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="4" y="20.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="6" y1="22" x2="10" y2="22" marker-end="url(#ah)"/>
+<line x1="10" y1="24" x2="6" y2="24" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="36" y="20.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="38" y1="22" x2="42" y2="22" marker-end="url(#ah)"/>
+<line x1="42" y1="24" x2="38" y2="24" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="1" y="32.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="3" y1="34" x2="7" y2="34" marker-end="url(#ah)"/>
+<line x1="7" y1="36" x2="3" y2="36" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="20" y="32.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="22" y1="34" x2="26" y2="34" marker-end="url(#ah)"/>
+<line x1="26" y1="36" x2="22" y2="36" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="39" y="32.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="41" y1="34" x2="45" y2="34" marker-end="url(#ah)"/>
+<line x1="45" y1="36" x2="41" y2="36" marker-end="url(#ah)"/></g><text x="49" y="12" font-size="2.2" class="t2">Cœur</text><text x="49" y="24" font-size="2.2" class="t2">Distribution</text><text x="49" y="36" font-size="2.2" class="t2">Accès</text><line x1="64" y1="2" x2="64" y2="44" stroke="#D6D0C4" stroke-width="0.25"/><text x="95" y="3.4" font-size="2.3" text-anchor="middle" font-weight="600">SPINE-LEAF (CENTRE DE DONNÉES)</text><line x1="84" y1="15.1" x2="72" y2="28.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="84" y1="15.1" x2="87" y2="28.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="84" y1="15.1" x2="102" y2="28.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="84" y1="15.1" x2="117" y2="28.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="106" y1="15.1" x2="72" y2="28.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="106" y1="15.1" x2="87" y2="28.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="106" y1="15.1" x2="102" y2="28.9" stroke="#1C1F26" stroke-width="0.25"/><line x1="106" y1="15.1" x2="117" y2="28.9" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="80" y="10.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="82" y1="12" x2="86" y2="12" marker-end="url(#ah)"/>
+<line x1="86" y1="14" x2="82" y2="14" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="102" y="10.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="104" y1="12" x2="108" y2="12" marker-end="url(#ah)"/>
+<line x1="108" y1="14" x2="104" y2="14" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="68" y="28.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="70" y1="30" x2="74" y2="30" marker-end="url(#ah)"/>
+<line x1="74" y1="32" x2="70" y2="32" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="83" y="28.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="85" y1="30" x2="89" y2="30" marker-end="url(#ah)"/>
+<line x1="89" y1="32" x2="85" y2="32" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="98" y="28.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="100" y1="30" x2="104" y2="30" marker-end="url(#ah)"/>
+<line x1="104" y1="32" x2="100" y2="32" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="113" y="28.9" width="8" height="4.2" fill="#F4F1EA"/>
+<line x1="115" y1="30" x2="119" y2="30" marker-end="url(#ah)"/>
+<line x1="119" y1="32" x2="115" y2="32" marker-end="url(#ah)"/></g><line x1="72" y1="33.1" x2="72" y2="37" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="70" y="37" width="4" height="6"/>
+<line x1="70.8" y1="38.6" x2="73.2" y2="38.6"/>
+<line x1="70.8" y1="40" x2="73.2" y2="40"/></g><line x1="87" y1="33.1" x2="87" y2="37" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="85" y="37" width="4" height="6"/>
+<line x1="85.8" y1="38.6" x2="88.2" y2="38.6"/>
+<line x1="85.8" y1="40" x2="88.2" y2="40"/></g><line x1="102" y1="33.1" x2="102" y2="37" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="100" y="37" width="4" height="6"/>
+<line x1="100.8" y1="38.6" x2="103.2" y2="38.6"/>
+<line x1="100.8" y1="40" x2="103.2" y2="40"/></g><line x1="117" y1="33.1" x2="117" y2="37" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="115" y="37" width="4" height="6"/>
+<line x1="115.8" y1="38.6" x2="118.2" y2="38.6"/>
+<line x1="115.8" y1="40" x2="118.2" y2="40"/></g><text x="95" y="9" font-size="2.2" text-anchor="middle" class="t2">spines</text><text x="95" y="36.4" font-size="2.2" text-anchor="middle" class="t2">leafs</text>
+</svg><figcaption><b>Fig. 02</b>À gauche, le campus hiérarchique ; à droite, le spine-leaf, où tout serveur est à la même distance de tous les autres.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">7</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.2 · 1.12 — suite</span>
+    <span class="num">02<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">R1(config)#</span> vrf definition CLIENT-A</td><td class="role">Crée la VRF CLIENT-A</td></tr>
+<tr><td class="c"><span class="p">R1(config-vrf)#</span> address-family ipv4</td><td class="role">Active IPv4 dans la VRF</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> vrf forwarding CLIENT-A</td><td class="role">Rattache l’interface à la VRF</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> ip address 10.0.0.1 255.255.255.0</td><td class="role">Adresse (à ressaisir)</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show vrf</td><td class="role">VRF et interfaces associées</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ip route vrf CLIENT-A</td><td class="role">Table de routage de la VRF</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> ping vrf CLIENT-A 10.0.0.2</td><td class="role">Test dans le contexte VRF</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li><code>vrf forwarding</code> efface l’adresse IP déjà configurée sur l’interface : il faut la ressaisir.</li>
+<li>Spine-leaf : aucun lien leaf–leaf ni spine–spine. Un schéma qui en contient n’est pas un spine-leaf.</li>
+<li>Conteneur et VM ne sont pas équivalents : le conteneur n’embarque pas d’OS complet.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quel chemin suit le trafic entre deux serveurs raccordés à des leafs différents ?<ul class="o"><li><span class="l">A.</span>Leaf, leaf</li><li><span class="l">B.</span>Leaf, spine, leaf</li><li><span class="l">C.</span>Leaf, spine, spine, leaf</li><li><span class="l">D.</span>Leaf, cœur, leaf</li></ul></li>
+<li>Quel modèle cloud fournit des VM dont le client administre lui-même l’OS ?<ul class="o four"><li><span class="l">A.</span>SaaS</li><li><span class="l">B.</span>PaaS</li><li><span class="l">C.</span>IaaS</li><li><span class="l">D.</span>Cloud hybride</li></ul></li>
+<li>Deux clients utilisent 10.0.0.0/24 sur le même routeur. Quelle technologie évite le conflit ?<ul class="o four"><li><span class="l">A.</span>NAT statique</li><li><span class="l">B.</span>HSRP</li><li><span class="l">C.</span>VLAN</li><li><span class="l">D.</span>VRF</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>3-tier : Accès, Distribution, Cœur, du terminal vers le centre.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Chaque leaf est relié à chaque spine : un seul spine sépare deux leafs.</p><p><span class="a">2&nbsp;C</span> IaaS : le fournisseur gère le matériel, le client gère OS et applications.</p><p><span class="a">3&nbsp;D</span> Chaque VRF possède sa propre table de routage.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">8</span>
+  </footer>
+</section>
+</body>
+</html>

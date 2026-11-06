@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 03/40 — Câblage et défauts d'interface</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.3 · 1.4</span>
+    <span class="num">03<small>/40</small></span>
+  </header>
+  <h1>Câblage et défauts d’interface</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Comparer fibre monomode, fibre multimode et cuivre, puis identifier sur une interface les collisions, les erreurs et les discordances de duplex ou de vitesse.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Cuivre UTP : 100 m maximum par segment, connecteur RJ-45. Câble droit : PC ou routeur vers switch. Croisé : switch–switch, routeur–routeur, PC–routeur. L’Auto-MDIX corrige un mauvais choix de câble.</li>
+<li>Fibre multimode (MMF) : cœur de 50 ou 62,5 µm, courtes distances. Monomode (SMF) : cœur d’environ 9 µm, laser, plusieurs kilomètres. La fibre ignore les perturbations électromagnétiques ; modules SFP / SFP+.</li>
+<li>Média partagé (hub) : half-duplex, CSMA/CD, collisions normales. Point à point (switch) : full-duplex, aucune collision possible.</li>
+<li>Compteurs de <code>show interfaces</code> : runts (&lt; 64 octets), giants (&gt; 1518 octets), CRC (trame corrompue : câble, interférences), collisions, late collisions (après les 64 premiers octets).</li>
+<li>Autonégociation : si l’autre côté est forcé, l’interface détecte la vitesse mais pas le duplex ; elle passe alors en half à 10 ou 100 Mbit/s, en full à 1 Gbit/s. Vitesses différentes : lien down.</li>
+<li>Duplex mismatch : côté half, collisions et late collisions ; côté full, CRC et runts. Le lien reste up.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 42" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Duplex mismatch et types de câbles">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<g stroke="#1C1F26" stroke-width="0.25">
+<rect x="8.5" y="5.3" width="11" height="5.4" fill="#F4F1EA"/>
+<line x1="10.5" y1="7" x2="17.5" y2="7" marker-end="url(#ah)"/>
+<line x1="17.5" y1="9" x2="10.5" y2="9" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="104.5" y="5.3" width="11" height="5.4" fill="#F4F1EA"/>
+<line x1="106.5" y1="7" x2="113.5" y2="7" marker-end="url(#ah)"/>
+<line x1="113.5" y1="9" x2="106.5" y2="9" marker-end="url(#ah)"/></g><line x1="19.5" y1="8" x2="104.5" y2="8" stroke="#1C1F26" stroke-width="0.25"/><text x="14" y="4" font-size="2.4" text-anchor="middle" font-weight="600">SW1</text><text x="110" y="4" font-size="2.4" text-anchor="middle" font-weight="600">SW2</text><text x="21" y="6.6" font-size="2" class="m">speed auto · duplex auto</text><text x="103" y="6.6" font-size="2" text-anchor="end" class="m">speed 100 · duplex full</text><text x="14" y="14" font-size="2.1" text-anchor="middle">détecte 100 Mbit/s</text><text x="14" y="16.8" font-size="2.1" text-anchor="middle" class="acc">duplex : half</text><text x="14" y="19.6" font-size="2.1" text-anchor="middle" class="t2">late collisions</text><text x="110" y="14" font-size="2.1" text-anchor="middle">reste en full</text><text x="110" y="16.8" font-size="2.1" text-anchor="middle" class="t2">CRC, runts</text><text x="62" y="11.6" font-size="2.2" text-anchor="middle" class="acc">lien up/up, débit dégradé</text><line x1="2" y1="23" x2="122" y2="23" stroke="#D6D0C4" stroke-width="0.25"/><circle cx="48" cy="34" r="6.25" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/><circle cx="48" cy="34" r="2.5" fill="#1C1F26"/><text x="57" y="33" font-size="2.3" font-weight="600">Multimode</text><text x="57" y="36" font-size="2.1" class="t2">cœur 50 ou 62,5 µm</text><text x="57" y="39" font-size="2.1" class="t2">centaines de mètres</text><circle cx="92" cy="34" r="6.25" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/><circle cx="92" cy="34" r="0.45" fill="#1C1F26"/><text x="101" y="33" font-size="2.3" font-weight="600">Monomode</text><text x="101" y="36" font-size="2.1" class="t2">cœur ≈ 9 µm</text><text x="101" y="39" font-size="2.1" class="t2">laser, km</text><circle cx="10" cy="34" r="6.25" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/><circle cx="6.8" cy="31.6" r="0.8" fill="none" stroke="#1C1F26" stroke-width="0.2"/><circle cx="8.4" cy="31.6" r="0.8" fill="none" stroke="#1C1F26" stroke-width="0.2"/><circle cx="11.6" cy="31.6" r="0.8" fill="none" stroke="#1C1F26" stroke-width="0.2"/><circle cx="13.200000000000001" cy="31.6" r="0.8" fill="none" stroke="#1C1F26" stroke-width="0.2"/><circle cx="6.8" cy="36.4" r="0.8" fill="none" stroke="#1C1F26" stroke-width="0.2"/><circle cx="8.4" cy="36.4" r="0.8" fill="none" stroke="#1C1F26" stroke-width="0.2"/><circle cx="11.6" cy="36.4" r="0.8" fill="none" stroke="#1C1F26" stroke-width="0.2"/><circle cx="13.200000000000001" cy="36.4" r="0.8" fill="none" stroke="#1C1F26" stroke-width="0.2"/><text x="19" y="33" font-size="2.3" font-weight="600">Cuivre UTP</text><text x="19" y="36" font-size="2.1" class="t2">4 paires, RJ-45</text><text x="19" y="39" font-size="2.1" class="t2">100 m max</text>
+</svg><figcaption><b>Fig. 03</b>En haut, SW1 en autonégociation face à SW2 forcé : la vitesse est détectée, le duplex retombe en half. En bas, coupes à l’échelle : gaine de 125 µm, cœur noir.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">9</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.3 · 1.4 — suite</span>
+    <span class="num">03<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">SW1(config-if)#</span> speed 100</td><td class="role">Force la vitesse</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> duplex full</td><td class="role">Force le duplex</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> speed auto</td><td class="role">Rétablit l’autonégociation (idem <code>duplex auto</code>)</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show interfaces g0/1</td><td class="role">CRC, runts, collisions</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show interfaces status</td><td class="role">Vitesse et duplex (a- = négocié)</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show interfaces counters errors</td><td class="role">Erreurs par port</td></tr>
+<tr><td class="c"><span class="p">SW1#</span> clear counters g0/1</td><td class="role">Remet les compteurs à zéro</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Un duplex mismatch laisse l’interface up/up : seuls les compteurs (late collisions, CRC) le révèlent.</li>
+<li>Des collisions sur un lien full-duplex signalent une anomalie : CSMA/CD y est désactivé.</li>
+<li>La fibre la plus fine va le plus loin : monomode pour les kilomètres, multimode pour le bâtiment.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>SW1 est en autonégociation, SW2 forcé en 100/full sur un lien FastEthernet. État de SW1 ?<ul class="o four"><li><span class="l">A.</span>100 Mbit/s, full</li><li><span class="l">B.</span>100 Mbit/s, half</li><li><span class="l">C.</span>Lien down</li><li><span class="l">D.</span>10 Mbit/s, half</li></ul></li>
+<li>Quel compteur augmente du côté half-duplex d’un duplex mismatch ?<ul class="o four"><li><span class="l">A.</span>Giants</li><li><span class="l">B.</span>Output drops</li><li><span class="l">C.</span>Late collisions</li><li><span class="l">D.</span>Throttles</li></ul></li>
+<li>Deux bâtiments sont distants de 8 km. Quel support utiliser ?<ul class="o four"><li><span class="l">A.</span>Fibre monomode</li><li><span class="l">B.</span>UTP Cat6A</li><li><span class="l">C.</span>Fibre multimode</li><li><span class="l">D.</span>UTP Cat5e</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>Half voit des late collisions, full voit des CRC.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Vitesse détectée (100) ; duplex non négocié : half par défaut à 100 Mbit/s.</p><p><span class="a">2&nbsp;C</span> Le côté half détecte des collisions tardives ; le côté full compte des CRC.</p><p><span class="a">3&nbsp;A</span> Seule la monomode couvre plusieurs kilomètres ; l’UTP plafonne à 100 m.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">10</span>
+  </footer>
+</section>
+</body>
+</html>

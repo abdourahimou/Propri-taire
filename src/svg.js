@@ -48,6 +48,25 @@ function server(x, y) {
 <line x1="${n(x - 1.2)}" y1="${n(y)}" x2="${n(x + 1.2)}" y2="${n(y)}"/></g>`;
 }
 
+// Pare-feu : rectangle à appareil de briques.
+function fw(x, y, w = 9, h = 6) {
+  const x0 = x - w / 2, y0 = y - h / 2;
+  return `<g stroke="${INK}" stroke-width="${SW}" fill="${PAPER}">
+<rect x="${n(x0)}" y="${n(y0)}" width="${w}" height="${h}"/>
+<line x1="${n(x0)}" y1="${n(y0 + h / 3)}" x2="${n(x0 + w)}" y2="${n(y0 + h / 3)}"/>
+<line x1="${n(x0)}" y1="${n(y0 + 2 * h / 3)}" x2="${n(x0 + w)}" y2="${n(y0 + 2 * h / 3)}"/>
+<line x1="${n(x)}" y1="${n(y0)}" x2="${n(x)}" y2="${n(y0 + h / 3)}"/>
+<line x1="${n(x0 + w / 4)}" y1="${n(y0 + h / 3)}" x2="${n(x0 + w / 4)}" y2="${n(y0 + 2 * h / 3)}"/>
+<line x1="${n(x0 + 3 * w / 4)}" y1="${n(y0 + h / 3)}" x2="${n(x0 + 3 * w / 4)}" y2="${n(y0 + 2 * h / 3)}"/>
+<line x1="${n(x)}" y1="${n(y0 + 2 * h / 3)}" x2="${n(x)}" y2="${n(y0 + h)}"/></g>`;
+}
+
+// Boîte étiquetée (AP, WLC, VM…).
+function box(x, y, w, h, label, o = {}) {
+  return `<g><rect x="${n(x - w / 2)}" y="${n(y - h / 2)}" width="${w}" height="${h}" fill="${o.fill || PAPER}" stroke="${INK}" stroke-width="${SW}"${o.dash ? ` stroke-dasharray="${o.dash}"` : ''}/>
+<text x="${x}" y="${n(y + (o.size || 2.3) * 0.35)}" font-size="${o.size || 2.3}" text-anchor="middle"${o.mono ? ' class="m"' : ''}${o.bold ? ' font-weight="600"' : ''}>${label}</text></g>`;
+}
+
 function line(x1, y1, x2, y2, o = {}) {
   const dash = o.dash ? ` stroke-dasharray="${o.dash}"` : '';
   const mk = o.end ? ` marker-end="url(#${o.end})"` : '';
@@ -66,4 +85,4 @@ function text(x, y, s, o = {}) {
   return `<text x="${x}" y="${y}" font-size="${o.size || 2.6}"${o.anchor ? ` text-anchor="${o.anchor}"` : ''}${o.bold ? ' font-weight="600"' : ''}${cls ? ` class="${cls}"` : ''}>${s}</text>`;
 }
 
-module.exports = { svg, router, sw, pc, server, line, rect, text, INK, INK2, PAPER, ACC, FILL, RULE, SW };
+module.exports = { svg, router, sw, pc, server, fw, box, line, rect, text, INK, INK2, PAPER, ACC, FILL, RULE, SW };

@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 04/40 — TCP et UDP comparés</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.5</span>
+    <span class="num">04<small>/40</small></span>
+  </header>
+  <h1>TCP et UDP comparés</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Comparer TCP et UDP : établissement de la connexion, fiabilité, contrôle de flux, en-têtes et usages typiques.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>TCP : orienté connexion. Ouverture en trois temps (SYN, SYN-ACK, ACK), fermeture par FIN et ACK ou par RST. En-tête de 20 octets minimum. UDP : sans connexion, en-tête de 8 octets.</li>
+<li>Fiabilité TCP : numéros de séquence, accusés de réception (ACK), retransmission des segments perdus, remise dans l’ordre. UDP : aucune garantie ; l’application gère les pertes si besoin.</li>
+<li>Contrôle de flux TCP par fenêtrage (windowing) : le récepteur annonce combien d’octets il accepte avant d’accuser réception. UDP n’en a pas.</li>
+<li>Ports : bien connus 0–1023, enregistrés 1024–49151, dynamiques 49152–65535. Socket = adresse IP + protocole + port.</li>
+<li>TCP : FTP 20/21, SSH 22, Telnet 23, SMTP 25, HTTP 80, POP3 110, IMAP 143, HTTPS 443. UDP : DHCP 67/68, TFTP 69, NTP 123, SNMP 161/162, Syslog 514. DNS : 53, en UDP et en TCP.</li>
+<li>UDP convient à la voix et à la vidéo en temps réel (RTP), au DNS, au DHCP : une donnée retransmise en retard est inutile.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 45" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Échanges TCP et UDP">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<text x="8" y="4.2" font-size="2.3" text-anchor="middle" font-weight="600">Client</text><line x1="8" y1="6" x2="8" y2="44" stroke="#5B6470" stroke-width="0.25"/><text x="52" y="4.2" font-size="2.3" text-anchor="middle" font-weight="600">Serveur</text><line x1="52" y1="6" x2="52" y2="44" stroke="#5B6470" stroke-width="0.25"/><text x="74" y="4.2" font-size="2.3" text-anchor="middle" font-weight="600">Client</text><line x1="74" y1="6" x2="74" y2="44" stroke="#5B6470" stroke-width="0.25"/><text x="118" y="4.2" font-size="2.3" text-anchor="middle" font-weight="600">Serveur</text><line x1="118" y1="6" x2="118" y2="44" stroke="#5B6470" stroke-width="0.25"/><text x="30" y="2.2" font-size="2.6" text-anchor="middle" font-weight="600">TCP</text><text x="96" y="2.2" font-size="2.6" text-anchor="middle" font-weight="600">UDP</text><line x1="8" y1="9" x2="52" y2="12" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="30" y="9.2" font-size="2.1" text-anchor="middle" class="m">SYN  seq=100</text><line x1="52" y1="16" x2="8" y2="19" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="30" y="16.2" font-size="2.1" text-anchor="middle" class="m">SYN-ACK  seq=300 ack=101</text><line x1="8" y1="23" x2="52" y2="26" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="30" y="23.2" font-size="2.1" text-anchor="middle" class="m">ACK  ack=301</text><line x1="8" y1="31" x2="52" y2="34" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="30" y="31.2" font-size="2.1" text-anchor="middle" class="m">Données  seq=101, 500 o</text><line x1="52" y1="38" x2="8" y2="41" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="30" y="38.2" font-size="2.1" text-anchor="middle" class="m">ACK  ack=601</text><line x1="74" y1="10" x2="118" y2="13" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="96" y="10.2" font-size="2.1" text-anchor="middle" class="m">Requête DNS  port 53</text><line x1="118" y1="18" x2="74" y2="21" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="96" y="18.2" font-size="2.1" text-anchor="middle" class="m">Réponse DNS</text><line x1="74" y1="27" x2="118" y2="30" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="96" y="27.2" font-size="2.1" text-anchor="middle" class="m">RTP (voix), sans accusé</text><text x="96" y="39" font-size="2.1" text-anchor="middle" class="t2">pas de connexion,</text><text x="96" y="41.8" font-size="2.1" text-anchor="middle" class="t2">pas de retransmission</text><line x1="63" y1="2" x2="63" y2="44" stroke="#D6D0C4" stroke-width="0.25"/>
+</svg><figcaption><b>Fig. 04</b>À gauche, ouverture TCP en trois temps, puis 500 octets acquittés (ack = 101 + 500). À droite, UDP envoie sans session ni accusé.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">11</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.5 — suite</span>
+    <span class="num">04<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr class="show"><td class="c"><span class="p">R1#</span> show tcp brief</td><td class="role">Sessions TCP du routeur</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show control-plane host open-ports</td><td class="role">Ports TCP/UDP à l’écoute</td></tr>
+<tr><td class="c"><span class="p">R1#</span> telnet 198.51.100.20 443</td><td class="role">Teste l’ouverture d’un port TCP</td></tr>
+<tr><td class="c"><span class="p">R1(config-ext-nacl)#</span> permit udp any any eq 53</td><td class="role">ACL : DNS en UDP</td></tr>
+<tr><td class="c"><span class="p">R1(config-ext-nacl)#</span> permit tcp any any eq 22</td><td class="role">ACL : SSH en TCP</td></tr>
+<tr class="show"><td class="c"><span class="p">C:\&gt;</span> netstat -an</td><td class="role">Connexions et ports (Windows)</td></tr>
+<tr class="show"><td class="c"><span class="p">$</span> ss -tuln</td><td class="role">Ports à l’écoute (Linux)</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>DNS n’est pas limité à UDP : transferts de zone et réponses volumineuses passent par TCP 53.</li>
+<li>TFTP utilise UDP 69 ; FTP utilise TCP 20 et 21.</li>
+<li>Le fenêtrage est propre à TCP. Une réponse qui attribue un contrôle de flux à UDP est fausse.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quelle séquence ouvre une session TCP ?<ul class="o"><li><span class="l">A.</span>SYN, SYN-ACK, ACK</li><li><span class="l">B.</span>SYN, ACK, SYN-ACK</li><li><span class="l">C.</span>SYN, SYN, ACK</li><li><span class="l">D.</span>ACK, SYN, FIN</li></ul></li>
+<li>Quel protocole s’appuie sur UDP ?<ul class="o four"><li><span class="l">A.</span>SSH</li><li><span class="l">B.</span>HTTPS</li><li><span class="l">C.</span>SNMP</li><li><span class="l">D.</span>SMTP</li></ul></li>
+<li>Quel mécanisme TCP limite les données envoyées avant réception d’un accusé ?<ul class="o"><li><span class="l">A.</span>Les numéros de port</li><li><span class="l">B.</span>Le checksum</li><li><span class="l">C.</span>Le TTL</li><li><span class="l">D.</span>Le fenêtrage</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>SYN, SYN-ACK, ACK : je demande ; j’accepte et je demande ; j’accepte.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;A</span> Le client émet SYN, le serveur SYN-ACK, le client confirme par ACK.</p><p><span class="a">2&nbsp;C</span> SNMP : UDP 161 et 162. SSH, HTTPS et SMTP utilisent TCP.</p><p><span class="a">3&nbsp;D</span> La taille de fenêtre fixe le volume non acquitté autorisé.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">12</span>
+  </footer>
+</section>
+</body>
+</html>
