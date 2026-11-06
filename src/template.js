@@ -17,7 +17,7 @@ const NBSP = ' ';
 // Typographie française sur le texte courant, jamais dans <code>, balises ou SVG.
 function typo(html) {
   return html
-    .split(/(<code[\s\S]*?<\/code>|<svg[\s\S]*?<\/svg>|<[^>]+>)/)
+    .split(/(<code[\s\S]*?<\/code>|<td class="c">[\s\S]*?<\/td>|<svg[\s\S]*?<\/svg>|<[^>]+>)/)
     .map((part, i) => {
       if (i % 2 === 1) return part;
       return part
@@ -26,7 +26,6 @@ function typo(html) {
         .replace(/ ([;!?])/g, NNBSP + '$1')
         .replace(/« /g, '«' + NNBSP)
         .replace(/ »/g, NNBSP + '»')
-        .replace(/(\d) (\d{3})\b/g, '$1' + NNBSP + '$2')
         .replace(/→/g, '<span class="ar">→</span>')
         .replace(/ᵉ/g, '<sup>e</sup>')
         .replace(/⁶/g, '<sup>6</sup>');

@@ -279,7 +279,8 @@ table.cmd tr.show td.role::before {
 }
 .qcm ul.o.one { grid-template-columns: 1fr; }
 .qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
-.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
 .qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
 
 /* ---- Mnémotechnique ---- */
@@ -434,7 +435,7 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
     <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">R1(config)#</span> vrf definition CLIENT-A</td><td class="role">Crée la VRF CLIENT-A</td></tr>
 <tr><td class="c"><span class="p">R1(config-vrf)#</span> address-family ipv4</td><td class="role">Active IPv4 dans la VRF</td></tr>
 <tr><td class="c"><span class="p">R1(config-if)#</span> vrf forwarding CLIENT-A</td><td class="role">Rattache l’interface à la VRF</td></tr>
-<tr><td class="c"><span class="p">R1(config-if)#</span> ip address 10.0.0.1 255.255.255.0</td><td class="role">Adresse (à ressaisir)</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> ip address 10.0.0.1 255.255.255.0</td><td class="role">Adresse (à ressaisir)</td></tr>
 <tr class="show"><td class="c"><span class="p">R1#</span> show vrf</td><td class="role">VRF et interfaces associées</td></tr>
 <tr class="show"><td class="c"><span class="p">R1#</span> show ip route vrf CLIENT-A</td><td class="role">Table de routage de la VRF</td></tr>
 <tr class="show"><td class="c"><span class="p">R1#</span> ping vrf CLIENT-A 10.0.0.2</td><td class="role">Test dans le contexte VRF</td></tr></tbody></table>

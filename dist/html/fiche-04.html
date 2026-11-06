@@ -279,7 +279,8 @@ table.cmd tr.show td.role::before {
 }
 .qcm ul.o.one { grid-template-columns: 1fr; }
 .qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
-.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
 .qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
 
 /* ---- Mnémotechnique ---- */
@@ -358,7 +359,7 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 <li>Fiabilité TCP : numéros de séquence, accusés de réception (ACK), retransmission des segments perdus, remise dans l’ordre. UDP : aucune garantie ; l’application gère les pertes si besoin.</li>
 <li>Contrôle de flux TCP par fenêtrage (windowing) : le récepteur annonce combien d’octets il accepte avant d’accuser réception. UDP n’en a pas.</li>
 <li>Ports : bien connus 0–1023, enregistrés 1024–49151, dynamiques 49152–65535. Socket = adresse IP + protocole + port.</li>
-<li>TCP : FTP 20/21, SSH 22, Telnet 23, SMTP 25, HTTP 80, POP3 110, IMAP 143, HTTPS 443. UDP : DHCP 67/68, TFTP 69, NTP 123, SNMP 161/162, Syslog 514. DNS : 53, en UDP et en TCP.</li>
+<li>TCP : FTP 20/21, SSH 22, Telnet 23, SMTP 25, HTTP 80, POP3 110, IMAP 143, HTTPS 443. UDP : DHCP 67/68, TFTP 69, NTP 123, SNMP 161/162, Syslog 514. DNS : 53, en UDP et en TCP.</li>
 <li>UDP convient à la voix et à la vidéo en temps réel (RTP), au DNS, au DHCP : une donnée retransmise en retard est inutile.</li></ol></section>
   <figure class="schema"><svg viewBox="0 0 124 45" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Échanges TCP et UDP">
 <defs>
@@ -382,7 +383,7 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
   <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
     <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr class="show"><td class="c"><span class="p">R1#</span> show tcp brief</td><td class="role">Sessions TCP du routeur</td></tr>
 <tr class="show"><td class="c"><span class="p">R1#</span> show control-plane host open-ports</td><td class="role">Ports TCP/UDP à l’écoute</td></tr>
-<tr><td class="c"><span class="p">R1#</span> telnet 198.51.100.20 443</td><td class="role">Teste l’ouverture d’un port TCP</td></tr>
+<tr><td class="c"><span class="p">R1#</span> telnet 198.51.100.20 443</td><td class="role">Teste l’ouverture d’un port TCP</td></tr>
 <tr><td class="c"><span class="p">R1(config-ext-nacl)#</span> permit udp any any eq 53</td><td class="role">ACL : DNS en UDP</td></tr>
 <tr><td class="c"><span class="p">R1(config-ext-nacl)#</span> permit tcp any any eq 22</td><td class="role">ACL : SSH en TCP</td></tr>
 <tr class="show"><td class="c"><span class="p">C:\&gt;</span> netstat -an</td><td class="role">Connexions et ports (Windows)</td></tr>

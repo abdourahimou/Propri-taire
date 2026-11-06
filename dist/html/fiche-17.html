@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 17/40 — Lire la table de routage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">3.0 IP Connectivity</span>
+    <span class="obj">3.1</span>
+    <span class="num">17<small>/40</small></span>
+  </header>
+  <h1>Lire la table de routage</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Interpréter les composants d’une table de routage : code de protocole, préfixe, masque, next hop, distance administrative, métrique et gateway of last resort.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Codes : C connecté, L local (adresse de l’interface en /32), S statique, O OSPF, D EIGRP, R RIP, B BGP ; * marque une route par défaut candidate ; O IA inter-area ; E1 et E2 externes OSPF.</li>
+<li>Une entrée se lit : code, préfixe et longueur, [distance administrative / métrique], next hop, âge, interface de sortie.</li>
+<li>Distance administrative (AD) : confiance accordée à la source, la plus basse l’emporte. Métrique : coût du chemin au sein d’un même protocole.</li>
+<li>Gateway of last resort : next hop de la route par défaut 0.0.0.0/0. « not set » signifie qu’aucune route par défaut n’existe.</li>
+<li>Routes C et L : créées dès qu’une interface adressée est up/up, sans aucun protocole ; AD 0.</li>
+<li>Ligne d’en-tête « 10.0.0.0/8 is variably subnetted, 3 subnets, 3 masks » : regroupe les sous-réseaux du réseau classful 10.0.0.0, avec plusieurs longueurs de masque.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 43" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lecture de show ip route">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<text x="2" y="3.4" font-size="2.4" font-weight="600" class="m">R1# show ip route</text><text x="2" y="7.5" font-size="2.4" class="m">Gateway of last resort is 203.0.113.1 to network 0.0.0.0</text><text x="2" y="11.6" font-size="2.4" class="m">S*    0.0.0.0/0 [1/0] via 203.0.113.1</text><text x="2" y="15.7" font-size="2.4" class="m">      10.0.0.0/8 is variably subnetted, 3 subnets, 3 masks</text><text x="2" y="19.799999999999997" font-size="2.4" class="m">C        10.0.12.0/30 is directly connected, GigabitEthernet0/0/1</text><text x="2" y="23.9" font-size="2.4" class="m">L        10.0.12.1/32 is directly connected, GigabitEthernet0/0/1</text><text x="2" y="27.999999999999996" font-size="2.4" class="m">O        10.1.3.0/24 [110/3] via 10.0.12.2, 00:05:12, GigabitEthernet0/0/1</text><line x1="2" y1="29.599999999999998" x2="3.44" y2="29.599999999999998" stroke="#1C1F26" stroke-width="0.3"/><line x1="2.7199999999999998" y1="29.599999999999998" x2="2.7199999999999998" y2="31.399999999999995" stroke="#5B6470" stroke-width="0.25"/><text x="2.7199999999999998" y="33.599999999999994" font-size="2.1" text-anchor="middle">code</text><line x1="14.959999999999999" y1="29.599999999999998" x2="30.799999999999997" y2="29.599999999999998" stroke="#1C1F26" stroke-width="0.3"/><line x1="22.88" y1="29.599999999999998" x2="22.88" y2="35.39999999999999" stroke="#5B6470" stroke-width="0.25"/><text x="22.88" y="37.599999999999994" font-size="2.1" text-anchor="middle">préfixe / longueur</text><line x1="32.239999999999995" y1="29.599999999999998" x2="42.32" y2="29.599999999999998" stroke="#1C1F26" stroke-width="0.3"/><line x1="37.28" y1="29.599999999999998" x2="37.28" y2="31.399999999999995" stroke="#5B6470" stroke-width="0.25"/><text x="37.28" y="33.599999999999994" font-size="2.1" text-anchor="middle">[AD / métrique]</text><line x1="49.519999999999996" y1="29.599999999999998" x2="62.48" y2="29.599999999999998" stroke="#1C1F26" stroke-width="0.3"/><line x1="56" y1="29.599999999999998" x2="56" y2="35.39999999999999" stroke="#5B6470" stroke-width="0.25"/><text x="56" y="37.599999999999994" font-size="2.1" text-anchor="middle">next hop</text><line x1="65.36" y1="29.599999999999998" x2="76.88" y2="29.599999999999998" stroke="#1C1F26" stroke-width="0.3"/><line x1="71.12" y1="29.599999999999998" x2="71.12" y2="31.399999999999995" stroke="#5B6470" stroke-width="0.25"/><text x="71.12" y="33.599999999999994" font-size="2.1" text-anchor="middle">âge</text><line x1="79.75999999999999" y1="29.599999999999998" x2="108.56" y2="29.599999999999998" stroke="#1C1F26" stroke-width="0.3"/><line x1="94.16" y1="29.599999999999998" x2="94.16" y2="35.39999999999999" stroke="#5B6470" stroke-width="0.25"/><text x="94.16" y="37.599999999999994" font-size="2.1" text-anchor="middle">interface de sortie</text>
+</svg><figcaption><b>Fig. 17</b>Chaque champ de la ligne O identifié. La route S* fournit la gateway of last resort ; la ligne L est l’adresse propre de R1 sur g0/0/1.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">37</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">3.0 IP Connectivity</span>
+    <span class="obj">3.1 — suite</span>
+    <span class="num">17<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr class="show"><td class="c"><span class="p">R1#</span> show ip route</td><td class="role">Table IPv4 complète</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ip route ospf</td><td class="role">Routes O seulement</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ip route connected</td><td class="role">Réseaux connectés</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ip route 10.1.3.0</td><td class="role">Détail d’une entrée</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show ipv6 route</td><td class="role">Table IPv6</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>L n’est pas un réseau : c’est l’adresse de l’interface du routeur, en /32 (/128 en IPv6).</li>
+<li>Dans [110/3], 110 est la distance administrative et 3 la métrique, jamais l’inverse.</li>
+<li>« Gateway of last resort is not set » : sans correspondance, le paquet est rejeté.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Dans <code>O 10.1.3.0/24 [110/3] via 10.0.12.2</code>, quelle est la métrique ?<ul class="o four"><li><span class="l">A.</span>110</li><li><span class="l">B.</span>3</li><li><span class="l">C.</span>24</li><li><span class="l">D.</span>12</li></ul></li>
+<li>Quel code identifie l’adresse configurée sur une interface du routeur ?<ul class="o four"><li><span class="l">A.</span>C</li><li><span class="l">B.</span>S</li><li><span class="l">C.</span>L</li><li><span class="l">D.</span>*</li></ul></li>
+<li>Quelle ligne montre une route par défaut statique ?<ul class="o"><li><span class="l">A.</span>O*E2 0.0.0.0/0 [110/1]</li><li><span class="l">B.</span>C 0.0.0.0/0</li><li><span class="l">C.</span>L 203.0.113.2/32</li><li><span class="l">D.</span>S* 0.0.0.0/0 [1/0]</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>[AD/métrique] : la confiance d’abord, le coût ensuite.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Le crochet contient [AD/métrique] : AD 110, métrique 3.</p><p><span class="a">2&nbsp;C</span> L (local) : adresse de l’interface en /32. C : réseau connecté.</p><p><span class="a">3&nbsp;D</span> S = statique, * = candidate par défaut. O*E2 est une route par défaut apprise par OSPF.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">38</span>
+  </footer>
+</section>
+</body>
+</html>
