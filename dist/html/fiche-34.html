@@ -246,7 +246,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 0.9mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
 }
 .pieges li::before {
   content: "P" counter(p);
@@ -262,7 +262,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 1mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
   break-inside: avoid;
 }
 .qcm ol.q > li::before {
@@ -415,11 +415,11 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 <tr class="show"><td class="c"><span class="p">R1#</span> show ip interface g0/0/0</td><td class="role">ACL in / out actives</td></tr></tbody></table>
   </section>
   <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Un <code>deny ip any any</code> en séquence 10 rend inutiles tous les <code>permit</code> suivants.</li>
-<li>Sans <code>permit ip any any</code> final, tout le reste est bloqué, Hello OSPF compris.</li>
+<li>Sans <code>permit ip any any</code> final, tout est bloqué, Hello OSPF compris.</li>
 <li>ACL standard posée près de la source : l’hôte perd l’accès à toutes les destinations.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quel wildcard mask correspond au réseau <code>172.16.32.0/20</code> ?<ul class="o four"><li><span class="l">A.</span>0.0.16.255</li><li><span class="l">B.</span>0.0.31.255</li><li><span class="l">C.</span>0.0.15.0</li><li><span class="l">D.</span>0.0.15.255</li></ul></li>
 <li>ACL en entrée : <code>10 deny ip 192.168.10.0 0.0.0.255 any</code> puis <code>20 permit ip host 192.168.10.5 any</code>. Paquet issu de .5 ?<ul class="o"><li><span class="l">A.</span>Permis par la ligne 20</li><li><span class="l">B.</span>Bloqué par la ligne 10</li><li><span class="l">C.</span>Bloqué par le deny implicite</li><li><span class="l">D.</span>Permis, host étant plus précis</li></ul></li>
-<li>Selon Cisco, où appliquer l’ACL étendue filtrant 192.168.10.0/24 vers 10.1.1.10 (schéma) ?<ul class="o four"><li><span class="l">A.</span>g0/0/0, in</li><li><span class="l">B.</span>g0/0/1, in</li><li><span class="l">C.</span>g0/0/0, out</li><li><span class="l">D.</span>line vty 0 4</li></ul></li></ol></section>
+<li>Selon Cisco, où appliquer l’ACL étendue filtrant 192.168.10.0/24 vers 10.1.1.10 ?<ul class="o four"><li><span class="l">A.</span>g0/0/0, in</li><li><span class="l">B.</span>g0/0/1, in</li><li><span class="l">C.</span>g0/0/0, out</li><li><span class="l">D.</span>line vty 0 4</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>Standard → Destination, Étendue → Source.</p>
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;D</span> /20 = 255.255.240.0 ; 255.255.255.255 – 255.255.240.0 = 0.0.15.255.</p><p><span class="a">2&nbsp;B</span> Première correspondance : la ligne 10 couvre .5.</p><p><span class="a">3&nbsp;A</span> Étendue : au plus près de la source, en entrée de g0/0/0.</p></div>
   <footer class="foot">

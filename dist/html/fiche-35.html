@@ -246,7 +246,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 0.9mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
 }
 .pieges li::before {
   content: "P" counter(p);
@@ -262,7 +262,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 1mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
   break-inside: avoid;
 }
 .qcm ol.q > li::before {
@@ -406,7 +406,7 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 <tr class="show"><td class="c"><span class="p">SW1#</span> show ip dhcp snooping binding</td><td class="role">Table de liaisons</td></tr></tbody></table>
   </section>
   <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Port security sur un port en dynamic auto : commande refusée ; le port doit être access ou trunk.</li>
-<li>Le mode protect ne journalise rien et ne compte rien : les violations passent inaperçues.</li>
+<li>Mode protect : ni journal ni compteur, les violations passent inaperçues.</li>
 <li>DAI sans DHCP snooping ni ACL ARP : tous les ARP des ports untrusted sont rejetés.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quel est le mode de violation par défaut de port security ?<ul class="o four"><li><span class="l">A.</span>protect</li><li><span class="l">B.</span>restrict</li><li><span class="l">C.</span>shutdown</li><li><span class="l">D.</span>drop</li></ul></li>
 <li>Où placer <code>ip dhcp snooping trust</code> ?<ul class="o"><li><span class="l">A.</span>Sur tous les ports d’accès</li><li><span class="l">B.</span>Vers le serveur DHCP légitime</li><li><span class="l">C.</span>Sur aucun port</li><li><span class="l">D.</span>Sur la SVI</li></ul></li>

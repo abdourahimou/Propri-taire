@@ -246,7 +246,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 0.9mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
 }
 .pieges li::before {
   content: "P" counter(p);
@@ -262,7 +262,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 1mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
   break-inside: avoid;
 }
 .qcm ol.q > li::before {
@@ -404,11 +404,11 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 <tr class="show"><td class="c"><span class="p">R1#</span> show ip protocols</td><td class="role">RID, réseaux, passives</td></tr>
 <tr class="show"><td class="c"><span class="p">R1#</span> show ip route ospf</td><td class="role">Routes O et O*E2</td></tr></tbody></table>
   </section>
-  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Process ID différents : l’adjacence se forme. Area ID, timers Hello/Dead ou masque (réseau broadcast) différents : elle échoue.</li>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Process ID différents : adjacence formée. Area ID, Hello/Dead ou masque (réseau broadcast) différents : échec.</li>
 <li>Un <code>router-id</code> saisi sur un processus actif n’est appliqué qu’après <code>clear ip ospf process</code>.</li>
 <li><code>passive-interface</code> sur le lien R1–R2 : le /30 reste annoncé, mais l’adjacence tombe.</li></ol></section>
-  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Sans loopback ni <code>router-id</code>, R1 a trois interfaces actives : 10.0.12.1, 192.168.1.1 et 172.16.5.1. Quel est son RID ?<ul class="o four"><li><span class="l">A.</span>10.0.12.1</li><li><span class="l">B.</span>172.16.5.1</li><li><span class="l">C.</span>192.168.1.1</li><li><span class="l">D.</span>0.0.0.0</li></ul></li>
-<li>Le LAN 192.168.1.0/24 doit rester annoncé sans qu’aucun Hello ne parte vers les PC. Que configurer sur R1 ?<ul class="o"><li><span class="l">A.</span>passive-interface g0/0/2</li><li><span class="l">B.</span>ip ospf cost 65535</li><li><span class="l">C.</span>shutdown sur g0/0/2</li><li><span class="l">D.</span>Retirer le network du LAN</li></ul></li>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Sans loopback ni <code>router-id</code>, R1 a les interfaces actives 10.0.12.1, 192.168.1.1, 172.16.5.1. RID ?<ul class="o four"><li><span class="l">A.</span>10.0.12.1</li><li><span class="l">B.</span>172.16.5.1</li><li><span class="l">C.</span>192.168.1.1</li><li><span class="l">D.</span>0.0.0.0</li></ul></li>
+<li>Le LAN 192.168.1.0/24 doit rester annoncé, sans Hello vers les PC. Que configurer ?<ul class="o"><li><span class="l">A.</span>passive-interface g0/0/2</li><li><span class="l">B.</span>ip ospf cost 65535</li><li><span class="l">C.</span>shutdown sur g0/0/2</li><li><span class="l">D.</span>Retirer le network du LAN</li></ul></li>
 <li>R1 (process 1) et R2 (process 10) partagent un /30 Ethernet en area 0, timers par défaut. État attendu ?<ul class="o four"><li><span class="l">A.</span>FULL</li><li><span class="l">B.</span>2WAY</li><li><span class="l">C.</span>EXSTART</li><li><span class="l">D.</span>Aucun voisin</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>RID : manuel, puis loopback, puis physique ; à chaque étape, la plus haute IP.</p>
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Ni RID manuel ni loopback : plus haute IP d’interface active.</p><p><span class="a">2&nbsp;A</span> L’interface passive reste annoncée mais n’émet plus de Hello.</p><p><span class="a">3&nbsp;A</span> Process ID local ; entre DR et BDR, l’adjacence atteint FULL.</p></div>

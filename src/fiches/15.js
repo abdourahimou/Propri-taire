@@ -57,7 +57,7 @@ module.exports = {
   ],
   pieges: [
     "PortFast ne désactive pas STP : il supprime seulement l'attente avant forwarding.",
-    'Root Guard bloque tant que des BPDU supérieurs arrivent ; BPDU Guard met le port en err-disabled au premier BPDU.',
+    'Root Guard bloque tant que des BPDU supérieurs arrivent ; BPDU Guard coupe le port au premier BPDU.',
     'Sans <code>errdisable recovery</code>, un port err-disabled exige <code>shutdown</code> puis <code>no shutdown</code>.',
   ],
   qcm: [
@@ -75,7 +75,7 @@ module.exports = {
       why: 'Root Guard refuse qu\'un root apparaisse derrière ce port.',
     },
     {
-      q: 'Quelle fonction empêche un port alternate de passer en forwarding quand les BPDU cessent ?',
+      q: 'Quelle fonction bloque un port alternate qui ne reçoit plus de BPDU ?',
       o: ['BPDU Filter', 'Root Guard', 'PortFast', 'Loop Guard'],
       four: true,
       a: 'D',

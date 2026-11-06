@@ -65,9 +65,9 @@ module.exports = {
     ['R1# traceroute 192.168.2.10', 'Chemin suivi', true],
   ],
   pieges: [
-    "Route aller correcte mais ping en échec : vérifier la route retour sur le routeur distant.",
-    "Next hop injoignable : la route statique reste configurée mais n'apparaît pas dans la table.",
-    "<code>ip route 192.168.2.0 255.255.0.0 …</code> est refusé : l'adresse doit être l'adresse réseau du masque.",
+    "Ping en échec malgré une route aller correcte : vérifier la route retour.",
+    "Next hop injoignable : la route reste configurée, mais hors de la table.",
+    "<code>ip route 192.168.2.0 255.255.0.0 …</code> est refusé : adresse et masque incohérents.",
   ],
   qcm: [
     {
@@ -78,14 +78,14 @@ module.exports = {
       why: 'Route d\'hôte = /32, soit 255.255.255.255.',
     },
     {
-      q: 'Une statique via 10.0.12.2 est configurée mais absente de la table. Cause probable ?',
+      q: 'Statique via 10.0.12.2 configurée mais absente de la table : cause probable ?',
       o: ['AD 1 trop faible', 'Masque en /24', 'Next hop injoignable', 'CEF désactivé'],
       a: 'C',
       why: 'Une statique récursive n\'est installée que si son next hop est joignable.',
     },
     {
-      q: 'R1 a une route vers le LAN B, mais le ping depuis le LAN A échoue. R2 n\'a aucune autre route. Correctif ?',
-      o: ['Route vers 192.168.2.0/24 sur R1', 'Route vers 192.168.1.0/24 sur R2', 'no shutdown sur R1 g0/0/1', 'AD 200 sur la route de R1'],
+      q: 'R1 a une route vers le LAN B ; R2 n\'a que ses réseaux connectés. Correctif ?',
+      o: ['Route vers le LAN B sur R1', 'Route vers le LAN A sur R2', 'no shutdown sur R1', 'AD 200 sur R1'],
       a: 'B',
       why: 'Le retour vers 192.168.1.0/24 manque sur R2.',
     },

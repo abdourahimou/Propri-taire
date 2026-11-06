@@ -246,7 +246,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 0.9mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
 }
 .pieges li::before {
   content: "P" counter(p);
@@ -262,7 +262,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 1mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
   break-inside: avoid;
 }
 .qcm ol.q > li::before {
@@ -402,11 +402,11 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 <tr class="show"><td class="c"><span class="p">SW2#</span> show spanning-tree interface g0/10 detail</td><td class="role">PortFast, BPDU Guard, BPDU</td></tr></tbody></table>
   </section>
   <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>PortFast ne désactive pas STP : il supprime seulement l’attente avant forwarding.</li>
-<li>Root Guard bloque tant que des BPDU supérieurs arrivent ; BPDU Guard met le port en err-disabled au premier BPDU.</li>
+<li>Root Guard bloque tant que des BPDU supérieurs arrivent ; BPDU Guard coupe le port au premier BPDU.</li>
 <li>Sans <code>errdisable recovery</code>, un port err-disabled exige <code>shutdown</code> puis <code>no shutdown</code>.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Un utilisateur branche un switch sur un port en PortFast avec BPDU Guard. État du port ?<ul class="o"><li><span class="l">A.</span>Forwarding</li><li><span class="l">B.</span>Root-inconsistent</li><li><span class="l">C.</span>Err-disabled</li><li><span class="l">D.</span>Blocking</li></ul></li>
 <li>Quelle protection met un port en root-inconsistent à la réception d’un BPDU supérieur ?<ul class="o four"><li><span class="l">A.</span>Root Guard</li><li><span class="l">B.</span>BPDU Guard</li><li><span class="l">C.</span>Loop Guard</li><li><span class="l">D.</span>PortFast</li></ul></li>
-<li>Quelle fonction empêche un port alternate de passer en forwarding quand les BPDU cessent ?<ul class="o four"><li><span class="l">A.</span>BPDU Filter</li><li><span class="l">B.</span>Root Guard</li><li><span class="l">C.</span>PortFast</li><li><span class="l">D.</span>Loop Guard</li></ul></li></ol></section>
+<li>Quelle fonction bloque un port alternate qui ne reçoit plus de BPDU ?<ul class="o four"><li><span class="l">A.</span>BPDU Filter</li><li><span class="l">B.</span>Root Guard</li><li><span class="l">C.</span>PortFast</li><li><span class="l">D.</span>Loop Guard</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>BPDU Guard coupe, Root Guard bloque, Loop Guard retient.</p>
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Le switch ajouté émet des BPDU : BPDU Guard désactive le port.</p><p><span class="a">2&nbsp;A</span> Root Guard refuse qu’un root apparaisse derrière ce port.</p><p><span class="a">3&nbsp;D</span> Loop Guard place le port en loop-inconsistent au lieu de le débloquer.</p></div>
   <footer class="foot">

@@ -63,7 +63,7 @@ module.exports = {
   ],
   pieges: [
     'Port security sur un port en dynamic auto : commande refusée ; le port doit être access ou trunk.',
-    'Le mode protect ne journalise rien et ne compte rien : les violations passent inaperçues.',
+    'Mode protect : ni journal ni compteur, les violations passent inaperçues.',
     'DAI sans DHCP snooping ni ACL ARP : tous les ARP des ports untrusted sont rejetés.',
   ],
   qcm: [

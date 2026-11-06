@@ -72,20 +72,20 @@ module.exports = {
     ['R1# show ip route ospf', 'Routes O et O*E2', true],
   ],
   pieges: [
-    "Process ID différents : l'adjacence se forme. Area ID, timers Hello/Dead ou masque (réseau broadcast) différents : elle échoue.",
+    "Process ID différents : adjacence formée. Area ID, Hello/Dead ou masque (réseau broadcast) différents : échec.",
     "Un <code>router-id</code> saisi sur un processus actif n'est appliqué qu'après <code>clear ip ospf process</code>.",
     "<code>passive-interface</code> sur le lien R1–R2 : le /30 reste annoncé, mais l'adjacence tombe.",
   ],
   qcm: [
     {
-      q: "Sans loopback ni <code>router-id</code>, R1 a trois interfaces actives : 10.0.12.1, 192.168.1.1 et 172.16.5.1. Quel est son RID ?",
+      q: "Sans loopback ni <code>router-id</code>, R1 a les interfaces actives 10.0.12.1, 192.168.1.1, 172.16.5.1. RID ?",
       o: ['10.0.12.1', '172.16.5.1', '192.168.1.1', '0.0.0.0'],
       four: true,
       a: 'C',
       why: 'Ni RID manuel ni loopback : plus haute IP d\'interface active.',
     },
     {
-      q: 'Le LAN 192.168.1.0/24 doit rester annoncé sans qu\'aucun Hello ne parte vers les PC. Que configurer sur R1 ?',
+      q: 'Le LAN 192.168.1.0/24 doit rester annoncé, sans Hello vers les PC. Que configurer ?',
       four: false,
       o: ['passive-interface g0/0/2', 'ip ospf cost 65535', 'shutdown sur g0/0/2', 'Retirer le network du LAN'],
       a: 'A',

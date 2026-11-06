@@ -246,7 +246,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 0.9mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
 }
 .pieges li::before {
   content: "P" counter(p);
@@ -262,7 +262,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 1mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
   break-inside: avoid;
 }
 .qcm ol.q > li::before {
@@ -1514,11 +1514,11 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 <tr class="show"><td class="c"><span class="p">SW2#</span> show spanning-tree interface g0/10 detail</td><td class="role">PortFast, BPDU Guard, BPDU</td></tr></tbody></table>
   </section>
   <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>PortFast ne désactive pas STP : il supprime seulement l’attente avant forwarding.</li>
-<li>Root Guard bloque tant que des BPDU supérieurs arrivent ; BPDU Guard met le port en err-disabled au premier BPDU.</li>
+<li>Root Guard bloque tant que des BPDU supérieurs arrivent ; BPDU Guard coupe le port au premier BPDU.</li>
 <li>Sans <code>errdisable recovery</code>, un port err-disabled exige <code>shutdown</code> puis <code>no shutdown</code>.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Un utilisateur branche un switch sur un port en PortFast avec BPDU Guard. État du port ?<ul class="o"><li><span class="l">A.</span>Forwarding</li><li><span class="l">B.</span>Root-inconsistent</li><li><span class="l">C.</span>Err-disabled</li><li><span class="l">D.</span>Blocking</li></ul></li>
 <li>Quelle protection met un port en root-inconsistent à la réception d’un BPDU supérieur ?<ul class="o four"><li><span class="l">A.</span>Root Guard</li><li><span class="l">B.</span>BPDU Guard</li><li><span class="l">C.</span>Loop Guard</li><li><span class="l">D.</span>PortFast</li></ul></li>
-<li>Quelle fonction empêche un port alternate de passer en forwarding quand les BPDU cessent ?<ul class="o four"><li><span class="l">A.</span>BPDU Filter</li><li><span class="l">B.</span>Root Guard</li><li><span class="l">C.</span>PortFast</li><li><span class="l">D.</span>Loop Guard</li></ul></li></ol></section>
+<li>Quelle fonction bloque un port alternate qui ne reçoit plus de BPDU ?<ul class="o four"><li><span class="l">A.</span>BPDU Filter</li><li><span class="l">B.</span>Root Guard</li><li><span class="l">C.</span>PortFast</li><li><span class="l">D.</span>Loop Guard</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>BPDU Guard coupe, Root Guard bloque, Loop Guard retient.</p>
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Le switch ajouté émet des BPDU : BPDU Guard désactive le port.</p><p><span class="a">2&nbsp;A</span> Root Guard refuse qu’un root apparaisse derrière ce port.</p><p><span class="a">3&nbsp;D</span> Loop Guard place le port en loop-inconsistent au lieu de le débloquer.</p></div>
   <footer class="foot">
@@ -1770,12 +1770,12 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 <tr class="show"><td class="c"><span class="p">R1#</span> ping 192.168.2.10 source 192.168.1.1</td><td class="role">Test aller et retour</td></tr>
 <tr class="show"><td class="c"><span class="p">R1#</span> traceroute 192.168.2.10</td><td class="role">Chemin suivi</td></tr></tbody></table>
   </section>
-  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Route aller correcte mais ping en échec : vérifier la route retour sur le routeur distant.</li>
-<li>Next hop injoignable : la route statique reste configurée mais n’apparaît pas dans la table.</li>
-<li><code>ip route 192.168.2.0 255.255.0.0 …</code> est refusé : l’adresse doit être l’adresse réseau du masque.</li></ol></section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Ping en échec malgré une route aller correcte : vérifier la route retour.</li>
+<li>Next hop injoignable : la route reste configurée, mais hors de la table.</li>
+<li><code>ip route 192.168.2.0 255.255.0.0 …</code> est refusé : adresse et masque incohérents.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quel masque donner à <code>ip route 192.0.2.50 … 10.0.0.2</code> pour une route d’hôte ?<ul class="o four"><li><span class="l">A.</span>255.255.255.255</li><li><span class="l">B.</span>255.255.255.0</li><li><span class="l">C.</span>0.0.0.0</li><li><span class="l">D.</span>255.255.255.254</li></ul></li>
-<li>Une statique via 10.0.12.2 est configurée mais absente de la table. Cause probable ?<ul class="o"><li><span class="l">A.</span>AD 1 trop faible</li><li><span class="l">B.</span>Masque en /24</li><li><span class="l">C.</span>Next hop injoignable</li><li><span class="l">D.</span>CEF désactivé</li></ul></li>
-<li>R1 a une route vers le LAN B, mais le ping depuis le LAN A échoue. R2 n’a aucune autre route. Correctif ?<ul class="o"><li><span class="l">A.</span>Route vers 192.168.2.0/24 sur R1</li><li><span class="l">B.</span>Route vers 192.168.1.0/24 sur R2</li><li><span class="l">C.</span>no shutdown sur R1 g0/0/1</li><li><span class="l">D.</span>AD 200 sur la route de R1</li></ul></li></ol></section>
+<li>Statique via 10.0.12.2 configurée mais absente de la table : cause probable ?<ul class="o"><li><span class="l">A.</span>AD 1 trop faible</li><li><span class="l">B.</span>Masque en /24</li><li><span class="l">C.</span>Next hop injoignable</li><li><span class="l">D.</span>CEF désactivé</li></ul></li>
+<li>R1 a une route vers le LAN B ; R2 n’a que ses réseaux connectés. Correctif ?<ul class="o"><li><span class="l">A.</span>Route vers le LAN B sur R1</li><li><span class="l">B.</span>Route vers le LAN A sur R2</li><li><span class="l">C.</span>no shutdown sur R1</li><li><span class="l">D.</span>AD 200 sur R1</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>Une route aller, une route retour.</p>
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;A</span> Route d’hôte = /32, soit 255.255.255.255.</p><p><span class="a">2&nbsp;C</span> Une statique récursive n’est installée que si son next hop est joignable.</p><p><span class="a">3&nbsp;B</span> Le retour vers 192.168.1.0/24 manque sur R2.</p></div>
   <footer class="foot">
@@ -2034,11 +2034,11 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 <tr class="show"><td class="c"><span class="p">R1#</span> show ip protocols</td><td class="role">RID, réseaux, passives</td></tr>
 <tr class="show"><td class="c"><span class="p">R1#</span> show ip route ospf</td><td class="role">Routes O et O*E2</td></tr></tbody></table>
   </section>
-  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Process ID différents : l’adjacence se forme. Area ID, timers Hello/Dead ou masque (réseau broadcast) différents : elle échoue.</li>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Process ID différents : adjacence formée. Area ID, Hello/Dead ou masque (réseau broadcast) différents : échec.</li>
 <li>Un <code>router-id</code> saisi sur un processus actif n’est appliqué qu’après <code>clear ip ospf process</code>.</li>
 <li><code>passive-interface</code> sur le lien R1–R2 : le /30 reste annoncé, mais l’adjacence tombe.</li></ol></section>
-  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Sans loopback ni <code>router-id</code>, R1 a trois interfaces actives : 10.0.12.1, 192.168.1.1 et 172.16.5.1. Quel est son RID ?<ul class="o four"><li><span class="l">A.</span>10.0.12.1</li><li><span class="l">B.</span>172.16.5.1</li><li><span class="l">C.</span>192.168.1.1</li><li><span class="l">D.</span>0.0.0.0</li></ul></li>
-<li>Le LAN 192.168.1.0/24 doit rester annoncé sans qu’aucun Hello ne parte vers les PC. Que configurer sur R1 ?<ul class="o"><li><span class="l">A.</span>passive-interface g0/0/2</li><li><span class="l">B.</span>ip ospf cost 65535</li><li><span class="l">C.</span>shutdown sur g0/0/2</li><li><span class="l">D.</span>Retirer le network du LAN</li></ul></li>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Sans loopback ni <code>router-id</code>, R1 a les interfaces actives 10.0.12.1, 192.168.1.1, 172.16.5.1. RID ?<ul class="o four"><li><span class="l">A.</span>10.0.12.1</li><li><span class="l">B.</span>172.16.5.1</li><li><span class="l">C.</span>192.168.1.1</li><li><span class="l">D.</span>0.0.0.0</li></ul></li>
+<li>Le LAN 192.168.1.0/24 doit rester annoncé, sans Hello vers les PC. Que configurer ?<ul class="o"><li><span class="l">A.</span>passive-interface g0/0/2</li><li><span class="l">B.</span>ip ospf cost 65535</li><li><span class="l">C.</span>shutdown sur g0/0/2</li><li><span class="l">D.</span>Retirer le network du LAN</li></ul></li>
 <li>R1 (process 1) et R2 (process 10) partagent un /30 Ethernet en area 0, timers par défaut. État attendu ?<ul class="o four"><li><span class="l">A.</span>FULL</li><li><span class="l">B.</span>2WAY</li><li><span class="l">C.</span>EXSTART</li><li><span class="l">D.</span>Aucun voisin</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>RID : manuel, puis loopback, puis physique ; à chaque étape, la plus haute IP.</p>
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Ni RID manuel ni loopback : plus haute IP d’interface active.</p><p><span class="a">2&nbsp;A</span> L’interface passive reste annoncée mais n’émet plus de Hello.</p><p><span class="a">3&nbsp;A</span> Process ID local ; entre DR et BDR, l’adjacence atteint FULL.</p></div>
@@ -2823,11 +2823,11 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 <tr class="show"><td class="c"><span class="p">R1#</span> show ip interface g0/0/0</td><td class="role">ACL in / out actives</td></tr></tbody></table>
   </section>
   <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Un <code>deny ip any any</code> en séquence 10 rend inutiles tous les <code>permit</code> suivants.</li>
-<li>Sans <code>permit ip any any</code> final, tout le reste est bloqué, Hello OSPF compris.</li>
+<li>Sans <code>permit ip any any</code> final, tout est bloqué, Hello OSPF compris.</li>
 <li>ACL standard posée près de la source : l’hôte perd l’accès à toutes les destinations.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quel wildcard mask correspond au réseau <code>172.16.32.0/20</code> ?<ul class="o four"><li><span class="l">A.</span>0.0.16.255</li><li><span class="l">B.</span>0.0.31.255</li><li><span class="l">C.</span>0.0.15.0</li><li><span class="l">D.</span>0.0.15.255</li></ul></li>
 <li>ACL en entrée : <code>10 deny ip 192.168.10.0 0.0.0.255 any</code> puis <code>20 permit ip host 192.168.10.5 any</code>. Paquet issu de .5 ?<ul class="o"><li><span class="l">A.</span>Permis par la ligne 20</li><li><span class="l">B.</span>Bloqué par la ligne 10</li><li><span class="l">C.</span>Bloqué par le deny implicite</li><li><span class="l">D.</span>Permis, host étant plus précis</li></ul></li>
-<li>Selon Cisco, où appliquer l’ACL étendue filtrant 192.168.10.0/24 vers 10.1.1.10 (schéma) ?<ul class="o four"><li><span class="l">A.</span>g0/0/0, in</li><li><span class="l">B.</span>g0/0/1, in</li><li><span class="l">C.</span>g0/0/0, out</li><li><span class="l">D.</span>line vty 0 4</li></ul></li></ol></section>
+<li>Selon Cisco, où appliquer l’ACL étendue filtrant 192.168.10.0/24 vers 10.1.1.10 ?<ul class="o four"><li><span class="l">A.</span>g0/0/0, in</li><li><span class="l">B.</span>g0/0/1, in</li><li><span class="l">C.</span>g0/0/0, out</li><li><span class="l">D.</span>line vty 0 4</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>Standard → Destination, Étendue → Source.</p>
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;D</span> /20 = 255.255.240.0 ; 255.255.255.255 – 255.255.240.0 = 0.0.15.255.</p><p><span class="a">2&nbsp;B</span> Première correspondance : la ligne 10 couvre .5.</p><p><span class="a">3&nbsp;A</span> Étendue : au plus près de la source, en entrée de g0/0/0.</p></div>
   <footer class="foot">
@@ -2899,7 +2899,7 @@ table.toc td.pg { text-align: right; width: 10mm; font-family: var(--f-title); f
 <tr class="show"><td class="c"><span class="p">SW1#</span> show ip dhcp snooping binding</td><td class="role">Table de liaisons</td></tr></tbody></table>
   </section>
   <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Port security sur un port en dynamic auto : commande refusée ; le port doit être access ou trunk.</li>
-<li>Le mode protect ne journalise rien et ne compte rien : les violations passent inaperçues.</li>
+<li>Mode protect : ni journal ni compteur, les violations passent inaperçues.</li>
 <li>DAI sans DHCP snooping ni ACL ARP : tous les ARP des ports untrusted sont rejetés.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quel est le mode de violation par défaut de port security ?<ul class="o four"><li><span class="l">A.</span>protect</li><li><span class="l">B.</span>restrict</li><li><span class="l">C.</span>shutdown</li><li><span class="l">D.</span>drop</li></ul></li>
 <li>Où placer <code>ip dhcp snooping trust</code> ?<ul class="o"><li><span class="l">A.</span>Sur tous les ports d’accès</li><li><span class="l">B.</span>Vers le serveur DHCP légitime</li><li><span class="l">C.</span>Sur aucun port</li><li><span class="l">D.</span>Sur la SVI</li></ul></li>

@@ -246,7 +246,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 0.9mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
 }
 .pieges li::before {
   content: "P" counter(p);
@@ -262,7 +262,7 @@ table.cmd tr.show td.role::before {
   position: relative;
   padding-left: 5mm;
   margin-bottom: 1mm;
-  font-size: 9pt;
+  font-size: 9.5pt;
   break-inside: avoid;
 }
 .qcm ol.q > li::before {
@@ -404,12 +404,12 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 <tr class="show"><td class="c"><span class="p">R1#</span> ping 192.168.2.10 source 192.168.1.1</td><td class="role">Test aller et retour</td></tr>
 <tr class="show"><td class="c"><span class="p">R1#</span> traceroute 192.168.2.10</td><td class="role">Chemin suivi</td></tr></tbody></table>
   </section>
-  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Route aller correcte mais ping en échec : vérifier la route retour sur le routeur distant.</li>
-<li>Next hop injoignable : la route statique reste configurée mais n’apparaît pas dans la table.</li>
-<li><code>ip route 192.168.2.0 255.255.0.0 …</code> est refusé : l’adresse doit être l’adresse réseau du masque.</li></ol></section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Ping en échec malgré une route aller correcte : vérifier la route retour.</li>
+<li>Next hop injoignable : la route reste configurée, mais hors de la table.</li>
+<li><code>ip route 192.168.2.0 255.255.0.0 …</code> est refusé : adresse et masque incohérents.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quel masque donner à <code>ip route 192.0.2.50 … 10.0.0.2</code> pour une route d’hôte ?<ul class="o four"><li><span class="l">A.</span>255.255.255.255</li><li><span class="l">B.</span>255.255.255.0</li><li><span class="l">C.</span>0.0.0.0</li><li><span class="l">D.</span>255.255.255.254</li></ul></li>
-<li>Une statique via 10.0.12.2 est configurée mais absente de la table. Cause probable ?<ul class="o"><li><span class="l">A.</span>AD 1 trop faible</li><li><span class="l">B.</span>Masque en /24</li><li><span class="l">C.</span>Next hop injoignable</li><li><span class="l">D.</span>CEF désactivé</li></ul></li>
-<li>R1 a une route vers le LAN B, mais le ping depuis le LAN A échoue. R2 n’a aucune autre route. Correctif ?<ul class="o"><li><span class="l">A.</span>Route vers 192.168.2.0/24 sur R1</li><li><span class="l">B.</span>Route vers 192.168.1.0/24 sur R2</li><li><span class="l">C.</span>no shutdown sur R1 g0/0/1</li><li><span class="l">D.</span>AD 200 sur la route de R1</li></ul></li></ol></section>
+<li>Statique via 10.0.12.2 configurée mais absente de la table : cause probable ?<ul class="o"><li><span class="l">A.</span>AD 1 trop faible</li><li><span class="l">B.</span>Masque en /24</li><li><span class="l">C.</span>Next hop injoignable</li><li><span class="l">D.</span>CEF désactivé</li></ul></li>
+<li>R1 a une route vers le LAN B ; R2 n’a que ses réseaux connectés. Correctif ?<ul class="o"><li><span class="l">A.</span>Route vers le LAN B sur R1</li><li><span class="l">B.</span>Route vers le LAN A sur R2</li><li><span class="l">C.</span>no shutdown sur R1</li><li><span class="l">D.</span>AD 200 sur R1</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>Une route aller, une route retour.</p>
   <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;A</span> Route d’hôte = /32, soit 255.255.255.255.</p><p><span class="a">2&nbsp;C</span> Une statique récursive n’est installée que si son next hop est joignable.</p><p><span class="a">3&nbsp;B</span> Le retour vers 192.168.1.0/24 manque sur R2.</p></div>
   <footer class="foot">

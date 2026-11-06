@@ -50,7 +50,7 @@ const PNG_DIR = process.env.PNG_DIR; // aperçus facultatifs
     for (const o of over) {
       const flag = o.spare_mm < 0 ? '  <-- DÉBORDEMENT' : '';
       if (o.spare_mm < 0) failed = true;
-      console.log(`${name} p${o.page} : blanc ${o.slack_mm} mm${flag}`);
+      console.log(`${name} p${o.page} : blanc ${o.slack_mm} mm${o.spare_mm < 0 ? " (dépasse de " + (-o.spare_mm) + " mm)" : ""}${flag}`);
     }
     console.log(`  polices : ${[...new Set(fonts)].join(', ')}`);
 

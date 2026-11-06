@@ -68,7 +68,7 @@ module.exports = {
   ],
   pieges: [
     "Un <code>deny ip any any</code> en séquence 10 rend inutiles tous les <code>permit</code> suivants.",
-    "Sans <code>permit ip any any</code> final, tout le reste est bloqué, Hello OSPF compris.",
+    "Sans <code>permit ip any any</code> final, tout est bloqué, Hello OSPF compris.",
     "ACL standard posée près de la source : l'hôte perd l'accès à toutes les destinations.",
   ],
   qcm: [
@@ -86,7 +86,7 @@ module.exports = {
       why: 'Première correspondance : la ligne 10 couvre .5.',
     },
     {
-      q: "Selon Cisco, où appliquer l'ACL étendue filtrant 192.168.10.0/24 vers 10.1.1.10 (schéma) ?",
+      q: "Selon Cisco, où appliquer l'ACL étendue filtrant 192.168.10.0/24 vers 10.1.1.10 ?",
       o: ['g0/0/0, in', 'g0/0/1, in', 'g0/0/0, out', 'line vty 0 4'],
       four: true,
       a: 'A',
