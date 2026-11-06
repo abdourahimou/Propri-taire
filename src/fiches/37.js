@@ -52,7 +52,7 @@ module.exports = {
     ['R1(config)# netconf-yang', 'Active NETCONF (TCP 830)'],
     ['R1(config)# ip http secure-server', 'Serveur HTTPS, prérequis RESTCONF'],
     ['R1(config)# restconf', 'Active RESTCONF'],
-    ['R1# show netconf-yang status', 'État du service NETCONF', true],
+    ['R1# show netconf-yang sessions', 'Sessions NETCONF ouvertes', true],
     ['R1# show platform software yang-management process', 'Processus du modèle YANG', true],
     ['R1# show archive config differences', 'Écart running / startup', true],
   ],
