@@ -38,7 +38,7 @@ module.exports = {
     "Préfixe de site courant /48, sous-réseaux en /64 : l'identifiant d'interface occupe 64 bits. <code>2001:db8::/32</code> est réservé à la documentation.",
     "GUA (Global Unicast) : <code>2000::/3</code>, routable sur Internet. ULA (Unique Local) : <code>FC00::/7</code>, en pratique <code>FD00::/8</code>, équivalent des adresses privées. Link-local : <code>FE80::/10</code>, automatique sur toute interface IPv6, jamais routée.",
     "Multicast <code>FF00::/8</code> : <code>FF02::1</code> tous les nœuds, <code>FF02::2</code> tous les routeurs, <code>FF02::1:FF00:0/104</code> solicited-node (NDP). IPv6 n'a pas de broadcast. Anycast : une même adresse unicast sur plusieurs nœuds ; le plus proche répond.",
-    "EUI-64 modifié : MAC coupée en deux, <code>FFFE</code> inséré au milieu, 7e bit du premier octet inversé.",
+    "EUI-64 modifié : MAC coupée en deux, <code>FFFE</code> inséré au milieu, 7ᵉ bit du premier octet inversé.",
     "Loopback <code>::1</code>, adresse non spécifiée <code>::</code>. Un routeur ne route IPv6 qu'avec <code>ipv6 unicast-routing</code>.",
   ],
   schema: schema(),
@@ -56,7 +56,7 @@ module.exports = {
   pieges: [
     "<code>::</code> ne s'emploie qu'une fois : <code>2001:db8::1::5</code> est invalide.",
     "Sans <code>ipv6 unicast-routing</code>, les adresses se configurent, mais le routeur ne route pas et n'émet pas de RA.",
-    "EUI-64 : c'est le 7e bit qui s'inverse. <code>00</code> devient <code>02</code>, pas <code>01</code>.",
+    "EUI-64 : c'est le 7ᵉ bit qui s'inverse. <code>00</code> devient <code>02</code>, pas <code>01</code>.",
   ],
   qcm: [
     {
@@ -76,7 +76,7 @@ module.exports = {
       q: 'MAC <code>0050.56AB.CDEF</code>. Quel identifiant d\'interface EUI-64 ?',
       o: ['0250:56ff:feab:cdef', '0050:56ff:feab:cdef', '0250:56fe:ffab:cdef', '0150:56ff:feab:cdef'],
       a: 'A',
-      why: 'FFFE au milieu ; 00 devient 02 par inversion du 7e bit.',
+      why: 'FFFE au milieu ; 00 devient 02 par inversion du 7ᵉ bit.',
     },
   ],
   mnemo: 'FE80 : lien · FD : privé · 2 ou 3 : global · FF : multicast.',

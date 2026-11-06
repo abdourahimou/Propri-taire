@@ -359,7 +359,7 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
 <li>Préfixe de site courant /48, sous-réseaux en /64 : l’identifiant d’interface occupe 64 bits. <code>2001:db8::/32</code> est réservé à la documentation.</li>
 <li>GUA (Global Unicast) : <code>2000::/3</code>, routable sur Internet. ULA (Unique Local) : <code>FC00::/7</code>, en pratique <code>FD00::/8</code>, équivalent des adresses privées. Link-local : <code>FE80::/10</code>, automatique sur toute interface IPv6, jamais routée.</li>
 <li>Multicast <code>FF00::/8</code> : <code>FF02::1</code> tous les nœuds, <code>FF02::2</code> tous les routeurs, <code>FF02::1:FF00:0/104</code> solicited-node (NDP). IPv6 n’a pas de broadcast. Anycast : une même adresse unicast sur plusieurs nœuds ; le plus proche répond.</li>
-<li>EUI-64 modifié : MAC coupée en deux, <code>FFFE</code> inséré au milieu, 7e bit du premier octet inversé.</li>
+<li>EUI-64 modifié : MAC coupée en deux, <code>FFFE</code> inséré au milieu, 7<sup>e</sup> bit du premier octet inversé.</li>
 <li>Loopback <code>::1</code>, adresse non spécifiée <code>::</code>. Un routeur ne route IPv6 qu’avec <code>ipv6 unicast-routing</code>.</li></ol></section>
   <figure class="schema"><svg viewBox="0 0 124 47" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Construction EUI-64">
 <defs>
@@ -402,12 +402,12 @@ sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
   </section>
   <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li><code>::</code> ne s’emploie qu’une fois : <code>2001:db8::1::5</code> est invalide.</li>
 <li>Sans <code>ipv6 unicast-routing</code>, les adresses se configurent, mais le routeur ne route pas et n’émet pas de RA.</li>
-<li>EUI-64 : c’est le 7e bit qui s’inverse. <code>00</code> devient <code>02</code>, pas <code>01</code>.</li></ol></section>
+<li>EUI-64 : c’est le 7<sup>e</sup> bit qui s’inverse. <code>00</code> devient <code>02</code>, pas <code>01</code>.</li></ol></section>
   <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quelle écriture abrège correctement <code>2001:0db8:0000:0000:0001:0000:0000:0010</code> ?<ul class="o"><li><span class="l">A.</span>2001:db8::1::10</li><li><span class="l">B.</span>2001:db8::1:0:0:10</li><li><span class="l">C.</span>2001:db8:0:0:1::1</li><li><span class="l">D.</span>2001:db8::1:10</li></ul></li>
 <li>Quel préfixe identifie une adresse link-local ?<ul class="o four"><li><span class="l">A.</span>FC00::/7</li><li><span class="l">B.</span>FF02::/16</li><li><span class="l">C.</span>2000::/3</li><li><span class="l">D.</span>FE80::/10</li></ul></li>
 <li>MAC <code>0050.56AB.CDEF</code>. Quel identifiant d’interface EUI-64 ?<ul class="o"><li><span class="l">A.</span>0250:56ff:feab:cdef</li><li><span class="l">B.</span>0050:56ff:feab:cdef</li><li><span class="l">C.</span>0250:56fe:ffab:cdef</li><li><span class="l">D.</span>0150:56ff:feab:cdef</li></ul></li></ol></section>
   <p class="mnemo"><span class="lbl">Repère</span>FE80 : lien · FD : privé · 2 ou 3 : global · FF : multicast.</p>
-  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Un seul :: ; 0010 devient 10 et les autres zéros restent écrits.</p><p><span class="a">2&nbsp;D</span> FE80::/10 : link-local. FC00::/7 : ULA ; 2000::/3 : GUA.</p><p><span class="a">3&nbsp;A</span> FFFE au milieu ; 00 devient 02 par inversion du 7e bit.</p></div>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Un seul :: ; 0010 devient 10 et les autres zéros restent écrits.</p><p><span class="a">2&nbsp;D</span> FE80::/10 : link-local. FC00::/7 : ULA ; 2000::/3 : GUA.</p><p><span class="a">3&nbsp;A</span> FFFE au milieu ; 00 devient 02 par inversion du 7<sup>e</sup> bit.</p></div>
   <footer class="foot">
     <span class="t">CCNA 200-301 — Fiches de révision</span>
     <span class="brand" data-brand></span>

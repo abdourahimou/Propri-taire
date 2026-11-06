@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 07/40 — Principes radio du Wi-Fi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.11</span>
+    <span class="num">07<small>/40</small></span>
+  </header>
+  <h1>Principes radio du Wi-Fi</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Décrire les principes du Wi-Fi : canaux non chevauchants, SSID, radiofréquences et chiffrement.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Bandes : 2,4 GHz (meilleure portée, plus d’interférences, 3 canaux utiles) et 5 GHz (davantage de canaux, portée plus courte) ; le Wi-Fi 6E ajoute 6 GHz. Normes : 802.11b/g (2,4), a (5), n (Wi-Fi 4), ac (Wi-Fi 5, 5 GHz), ax (Wi-Fi 6 / 6E).</li>
+<li>2,4 GHz : centres espacés de 5 MHz pour des canaux d’environ 22 MHz ; seuls 1, 6 et 11 sont disjoints. 5 GHz : canaux de 20 MHz disjoints, agrégeables en 40, 80 ou 160 MHz.</li>
+<li>Le Wi-Fi est un média partagé et half-duplex : accès par CSMA/CA (évitement de collision), un seul émetteur par canal à la fois.</li>
+<li>SSID : nom du réseau (32 caractères maximum), annoncé dans les beacons. BSS : un AP et ses clients, identifié par le BSSID (MAC de la radio de l’AP). ESS : plusieurs BSS sous le même SSID, avec itinérance (roaming). IBSS : mode ad hoc, sans AP.</li>
+<li>Propagation RF : absorption (murs, eau), réflexion (métal), réfraction, diffraction, diffusion. Niveau reçu (RSSI) en dBm ; −67 dBm est une cible courante pour la voix. SNR = signal − bruit.</li>
+<li>Chiffrement : WEP (RC4, cassé, à proscrire), WPA (TKIP), WPA2 (AES-CCMP), WPA3 (SAE et AES). Détail en fiche 36.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Canaux Wi-Fi 2,4 GHz">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<line x1="4" y1="34" x2="122.68" y2="34" stroke="#1C1F26" stroke-width="0.25"/><line x1="4" y1="34" x2="4" y2="35" stroke="#1C1F26" stroke-width="0.25"/><text x="4" y="37.6" font-size="2" text-anchor="middle" class="m">2400</text><line x1="31.6" y1="34" x2="31.6" y2="35" stroke="#1C1F26" stroke-width="0.25"/><text x="31.6" y="37.6" font-size="2" text-anchor="middle" class="m">2420</text><line x1="59.2" y1="34" x2="59.2" y2="35" stroke="#1C1F26" stroke-width="0.25"/><text x="59.2" y="37.6" font-size="2" text-anchor="middle" class="m">2440</text><line x1="86.8" y1="34" x2="86.8" y2="35" stroke="#1C1F26" stroke-width="0.25"/><text x="86.8" y="37.6" font-size="2" text-anchor="middle" class="m">2460</text><line x1="114.4" y1="34" x2="114.4" y2="35" stroke="#1C1F26" stroke-width="0.25"/><text x="114.4" y="37.6" font-size="2" text-anchor="middle" class="m">2480</text><text x="122.68" y="37.6" font-size="2" text-anchor="end" class="t2">MHz</text><text x="122.68" y="41.4" font-size="2" text-anchor="end" class="t2">canal</text><path d="M5.38,34 Q20.56,-14 35.74,34" fill="none" stroke="#1C1F26" stroke-width="0.35"/><text x="20.56" y="41.4" font-size="2.5" text-anchor="middle" font-weight="600">1</text><path d="M12.28,34 Q27.46,-2 42.64,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="27.46" y="41.4" font-size="2.1" text-anchor="middle" class="t2">2</text><path d="M19.18,34 Q34.36,-2 49.54,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="34.36" y="41.4" font-size="2.1" text-anchor="middle" class="t2">3</text><path d="M26.08,34 Q41.26,-2 56.44,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="41.26" y="41.4" font-size="2.1" text-anchor="middle" class="t2">4</text><path d="M32.98,34 Q48.16,-2 63.34,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="48.16" y="41.4" font-size="2.1" text-anchor="middle" class="t2">5</text><path d="M39.88,34 Q55.06,-14 70.24,34" fill="none" stroke="#1C1F26" stroke-width="0.35"/><text x="55.06" y="41.4" font-size="2.5" text-anchor="middle" font-weight="600">6</text><path d="M46.78,34 Q61.96,-2 77.14,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="61.96" y="41.4" font-size="2.1" text-anchor="middle" class="t2">7</text><path d="M53.68,34 Q68.86,-2 84.04,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="68.86" y="41.4" font-size="2.1" text-anchor="middle" class="t2">8</text><path d="M60.58,34 Q75.76,-2 90.94,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="75.76" y="41.4" font-size="2.1" text-anchor="middle" class="t2">9</text><path d="M67.48,34 Q82.66,-2 97.84,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="82.66" y="41.4" font-size="2.1" text-anchor="middle" class="t2">10</text><path d="M74.38,34 Q89.56,-14 104.74,34" fill="none" stroke="#1C1F26" stroke-width="0.35"/><text x="89.56" y="41.4" font-size="2.5" text-anchor="middle" font-weight="600">11</text><path d="M81.28,34 Q96.46,-2 111.64,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="96.46" y="41.4" font-size="2.1" text-anchor="middle" class="t2">12</text><path d="M88.18,34 Q103.36,-2 118.54,34" fill="none" stroke="#D6D0C4" stroke-width="0.25"/><text x="103.36" y="41.4" font-size="2.1" text-anchor="middle" class="t2">13</text><text x="18.56" y="3.6" font-size="2.4" font-weight="600">Canaux non chevauchants : 1, 6 et 11</text><text x="4" y="46.4" font-size="2.1" class="t2">Canal n : centre = 2407 + 5n MHz ; largeur ≈ 22 MHz. En 5 GHz, les canaux de 20 MHz (36, 40, 44…) ne se chevauchent pas.</text>
+</svg><figcaption><b>Fig. 07</b>Un canal 2,4 GHz déborde sur ses quatre voisins de chaque côté. Les canaux 1, 6 et 11 sont espacés de 25 MHz, donc disjoints.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">17</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">1.0 Network Fundamentals</span>
+    <span class="obj">1.11 — suite</span>
+    <span class="num">07<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr class="show"><td class="c"><span class="p">WLC#</span> show ap summary</td><td class="role">AP joints au contrôleur (C9800)</td></tr>
+<tr class="show"><td class="c"><span class="p">WLC#</span> show wireless client summary</td><td class="role">Clients associés (C9800)</td></tr>
+<tr class="show"><td class="c"><span class="p">C:\&gt;</span> netsh wlan show interfaces</td><td class="role">SSID, BSSID, canal, signal</td></tr>
+<tr class="show"><td class="c"><span class="p">C:\&gt;</span> netsh wlan show networks mode=bssid</td><td class="role">SSID et canaux visibles</td></tr>
+<tr class="show"><td class="c"><span class="p">$</span> iw dev wlan0 link</td><td class="role">SSID, fréquence, signal en dBm</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Deux AP voisins sur les canaux 1 et 3 se perturbent : seuls 1, 6 et 11 sont disjoints en 2,4 GHz.</li>
+<li>Le BSSID est l’adresse MAC de la radio de l’AP ; le SSID est le nom du réseau.</li>
+<li>Le Wi-Fi est half-duplex et utilise CSMA/CA, pas CSMA/CD.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Trois AP couvrent un même étage en 2,4 GHz. Quel plan de canaux retenir ?<ul class="o four"><li><span class="l">A.</span>1, 2, 3</li><li><span class="l">B.</span>1, 6, 11</li><li><span class="l">C.</span>2, 4, 6</li><li><span class="l">D.</span>3, 6, 9</li></ul></li>
+<li>Quel identifiant correspond à l’adresse MAC de la radio d’un AP ?<ul class="o four"><li><span class="l">A.</span>SSID</li><li><span class="l">B.</span>ESS</li><li><span class="l">C.</span>BSSID</li><li><span class="l">D.</span>VLAN ID</li></ul></li>
+<li>Quelle méthode d’accès au média le Wi-Fi utilise-t-il ?<ul class="o four"><li><span class="l">A.</span>CSMA/CD</li><li><span class="l">B.</span>Jeton</li><li><span class="l">C.</span>TDMA</li><li><span class="l">D.</span>CSMA/CA</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>1, 6, 11 : cinq canaux d’écart, soit 25 MHz, plus que les 22 MHz d’un canal.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> 1, 6 et 11 sont les seuls canaux 2,4 GHz sans chevauchement.</p><p><span class="a">2&nbsp;C</span> Le BSSID identifie un BSS par la MAC radio de l’AP.</p><p><span class="a">3&nbsp;D</span> Une radio ne détecte pas les collisions : elle les évite (CSMA/CA).</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">18</span>
+  </footer>
+</section>
+</body>
+</html>

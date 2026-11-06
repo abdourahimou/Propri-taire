@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 10/40 — Trunk 802.1Q et native VLAN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">2.0 Network Access</span>
+    <span class="obj">2.2</span>
+    <span class="num">10<small>/40</small></span>
+  </header>
+  <h1>Trunk 802.1Q et native VLAN</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Configurer et vérifier les trunks 802.1Q entre switchs, la liste des VLAN autorisés et le native VLAN.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Trunk : lien qui transporte plusieurs VLAN. 802.1Q insère une étiquette de 4 octets (TPID <code>0x8100</code>, PCP 3 bits pour la CoS, DEI 1 bit, VID 12 bits) entre la MAC source et l’EtherType, puis recalcule le FCS.</li>
+<li>Native VLAN (VLAN natif, VLAN 1 par défaut) : ses trames circulent sans étiquette. Il doit être identique aux deux extrémités ; sinon CDP signale un native VLAN mismatch et le trafic natif change de VLAN.</li>
+<li>DTP (Dynamic Trunking Protocol) : auto + auto = access ; desirable + auto ou desirable = trunk ; trunk + auto ou desirable = trunk. Mode par défaut des Catalyst 2960 : dynamic auto.</li>
+<li>Bonne pratique : <code>switchport mode trunk</code> puis <code>switchport nonegotiate</code> pour couper DTP.</li>
+<li>VLAN autorisés : 1–4094 par défaut. <code>allowed vlan 10,20</code> remplace la liste ; <code>allowed vlan add 30</code> la complète.</li>
+<li>Sécurité : native VLAN dédié et inutilisé (ici 999) contre le VLAN hopping par double étiquetage. Sur les switchs qui gèrent aussi ISL, <code>switchport trunk encapsulation dot1q</code> précède <code>mode trunk</code>.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 47" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Trunk et étiquette 802.1Q">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<g stroke="#1C1F26" stroke-width="0.25">
+<rect x="5" y="6" width="14" height="6" fill="#F4F1EA"/>
+<line x1="7" y1="8" x2="17" y2="8" marker-end="url(#ah)"/>
+<line x1="17" y1="10" x2="7" y2="10" marker-end="url(#ah)"/></g><g stroke="#1C1F26" stroke-width="0.25">
+<rect x="105" y="6" width="14" height="6" fill="#F4F1EA"/>
+<line x1="107" y1="8" x2="117" y2="8" marker-end="url(#ah)"/>
+<line x1="117" y1="10" x2="107" y2="10" marker-end="url(#ah)"/></g><text x="12" y="4.6" font-size="2.4" text-anchor="middle" font-weight="600">SW1</text><text x="112" y="4.6" font-size="2.4" text-anchor="middle" font-weight="600">SW2</text><line x1="19" y1="9" x2="105" y2="9" stroke="#1C1F26" stroke-width="0.5"/><text x="62" y="7.4" font-size="2" text-anchor="middle" class="m">trunk 802.1Q · native VLAN 999 · allowed 10,20,999</text><g><rect x="26" y="11.7" width="8" height="3.4" fill="#E9E4D8" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="30" y="14.06" font-size="1.9" text-anchor="middle" class="m" font-weight="600">10</text></g><g><rect x="34" y="11.7" width="8" height="3.4" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="38" y="14.06" font-size="1.9" text-anchor="middle">trame</text></g><g><rect x="50" y="11.7" width="8" height="3.4" fill="#E9E4D8" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="54" y="14.06" font-size="1.9" text-anchor="middle" class="m" font-weight="600">20</text></g><g><rect x="58" y="11.7" width="8" height="3.4" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="62" y="14.06" font-size="1.9" text-anchor="middle">trame</text></g><g><rect x="82" y="11.7" width="8" height="3.4" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="86" y="14.06" font-size="1.9" text-anchor="middle">trame</text></g><text x="82" y="18.6" font-size="2" text-anchor="middle" class="t2">native : sans étiquette</text><g><rect x="2" y="23.5" width="16" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="10" y="26.77" font-size="2.2" text-anchor="middle">MAC dest.</text></g><text x="10" y="31.2" font-size="1.9" text-anchor="middle" class="t2">6 o</text><g><rect x="18" y="23.5" width="16" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="26" y="26.77" font-size="2.2" text-anchor="middle">MAC source</text></g><text x="26" y="31.2" font-size="1.9" text-anchor="middle" class="t2">6 o</text><g><rect x="34" y="23.5" width="22" height="5" fill="#E9E4D8" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="45" y="26.77" font-size="2.2" text-anchor="middle" font-weight="600">802.1Q</text></g><text x="45" y="31.2" font-size="1.9" text-anchor="middle" class="t2">4 o</text><g><rect x="56" y="23.5" width="16" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="64" y="26.77" font-size="2.2" text-anchor="middle">EtherType</text></g><text x="64" y="31.2" font-size="1.9" text-anchor="middle" class="t2">2 o</text><g><rect x="72" y="23.5" width="32" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="88" y="26.77" font-size="2.2" text-anchor="middle">Données</text></g><text x="88" y="31.2" font-size="1.9" text-anchor="middle" class="t2">46–1500 o</text><g><rect x="104" y="23.5" width="10" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="109" y="26.77" font-size="2.2" text-anchor="middle">FCS</text></g><text x="109" y="31.2" font-size="1.9" text-anchor="middle" class="t2">4 o</text><line x1="34" y1="28.5" x2="20" y2="37.5" stroke="#5B6470" stroke-width="0.25" stroke-dasharray="0.6 0.5"/><line x1="56" y1="28.5" x2="102" y2="37.5" stroke="#5B6470" stroke-width="0.25" stroke-dasharray="0.6 0.5"/><g><rect x="20" y="37.5" width="22" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="31" y="40.73" font-size="2.1" text-anchor="middle" class="m">TPID 0x8100</text></g><text x="31" y="45.2" font-size="1.9" text-anchor="middle" class="t2">16 bits</text><g><rect x="42" y="37.5" width="16" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="50" y="40.73" font-size="2.1" text-anchor="middle">PCP</text></g><text x="50" y="45.2" font-size="1.9" text-anchor="middle" class="t2">3 bits</text><g><rect x="58" y="37.5" width="10" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="63" y="40.73" font-size="2.1" text-anchor="middle">DEI</text></g><text x="63" y="45.2" font-size="1.9" text-anchor="middle" class="t2">1</text><g><rect x="68" y="37.5" width="34" height="5" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="85" y="40.73" font-size="2.1" text-anchor="middle">VID (VLAN ID)</text></g><text x="85" y="45.2" font-size="1.9" text-anchor="middle" class="t2">12 bits</text>
+</svg><figcaption><b>Fig. 10</b>Les VLAN 10 et 20 traversent le trunk étiquetés ; seul le native VLAN passe sans étiquette. En bas, place et contenu de l’étiquette 802.1Q.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">23</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">2.0 Network Access</span>
+    <span class="obj">2.2 — suite</span>
+    <span class="num">10<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">SW1(config-if)#</span> switchport trunk encapsulation dot1q</td><td class="role">Si le switch gère aussi ISL</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> switchport mode trunk</td><td class="role">Trunk permanent</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> switchport trunk native vlan 999</td><td class="role">Native VLAN</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> switchport trunk allowed vlan 10,20,999</td><td class="role">Liste des VLAN autorisés</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> switchport trunk allowed vlan add 30</td><td class="role">Ajoute le VLAN 30</td></tr>
+<tr><td class="c"><span class="p">SW1(config-if)#</span> switchport nonegotiate</td><td class="role">Désactive DTP</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show interfaces trunk</td><td class="role">Trunks, native, VLAN actifs</td></tr>
+<tr class="show"><td class="c"><span class="p">SW1#</span> show interfaces g0/1 switchport</td><td class="role">Mode administratif et opérationnel</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li><code>allowed vlan 30</code> sans <code>add</code> remplace la liste : tous les autres VLAN sont coupés.</li>
+<li>Deux ports en dynamic auto ne forment pas de trunk : ils restent en accès.</li>
+<li>Native VLAN différent des deux côtés : le lien reste up, mais le trafic natif passe d’un VLAN à l’autre.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>SW1 et SW2 sont reliés par deux ports en dynamic auto. Mode opérationnel du lien ?<ul class="o four"><li><span class="l">A.</span>Trunk</li><li><span class="l">B.</span>Access</li><li><span class="l">C.</span>Err-disabled</li><li><span class="l">D.</span>Down</li></ul></li>
+<li>Quelle est la taille de l’étiquette 802.1Q ?<ul class="o four"><li><span class="l">A.</span>12 bits</li><li><span class="l">B.</span>2 octets</li><li><span class="l">C.</span>8 octets</li><li><span class="l">D.</span>4 octets</li></ul></li>
+<li>Quelle commande autorise le VLAN 30 sans retirer les VLAN déjà permis ?<ul class="o"><li><span class="l">A.</span>switchport trunk native vlan 30</li><li><span class="l">B.</span>switchport trunk allowed vlan 30</li><li><span class="l">C.</span>switchport trunk allowed vlan add 30</li><li><span class="l">D.</span>vlan 30</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>Auto + auto = access : il faut qu’un côté désire ou impose le trunk.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;B</span> Aucun des deux côtés ne sollicite le trunk : le lien reste en accès.</p><p><span class="a">2&nbsp;D</span> 4 octets : TPID (16 bits) + PCP, DEI, VID (16 bits). Le VID seul fait 12 bits.</p><p><span class="a">3&nbsp;C</span> add complète la liste ; sans add, la liste est remplacée.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">24</span>
+  </footer>
+</section>
+</body>
+</html>
