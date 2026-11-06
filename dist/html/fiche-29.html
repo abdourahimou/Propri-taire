@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 29/40 — Supervision : SNMP, Syslog, TFTP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">4.0 IP Services</span>
+    <span class="obj">4.4 · 4.5 · 4.9</span>
+    <span class="num">29<small>/40</small></span>
+  </header>
+  <h1>Supervision : SNMP, Syslog, TFTP</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Expliquer le rôle de SNMP, décrire les facilities et niveaux de gravité Syslog, et les fonctions de TFTP et FTP.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>SNMP : un manager (NMS) interroge des agents ; les objets sont décrits dans la MIB et identifiés par des OID. Get, GetNext, GetBulk (lecture), Set (écriture), Trap (alerte sans accusé), Inform (alerte avec accusé). Agent sur UDP 161, alertes vers UDP 162.</li>
+<li>SNMPv1 et v2c : community string transmise en clair (RO ou RW). SNMPv3 : utilisateurs, authentification et chiffrement (niveaux noAuthNoPriv, authNoPriv, authPriv).</li>
+<li>Syslog : messages horodatés vers la console, le buffer local ou un serveur (UDP 514). Forme : <code>%FACILITY-GRAVITÉ-MNÉMONIQUE: description</code>.</li>
+<li>Niveaux : un niveau configuré inclut tous les niveaux plus graves (numéro inférieur).<table class="ref"><tbody><tr><th>Niveau</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr><tr><th>Nom</th><td>emerg.</td><td>alert</td><td>crit.</td><td>error</td><td>warn.</td><td>notif.</td><td>info.</td><td>debug</td></tr></tbody></table></li>
+<li>TFTP : UDP 69, sans authentification ; sauvegarde de configurations et transfert d’images IOS. FTP : TCP 21 (contrôle) et 20 (données), utilisateur et mot de passe en clair. SCP et SFTP : équivalents chiffrés.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SNMP, Syslog et TFTP">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<circle cx="12" cy="17" r="4"/>
+<line x1="9.52" y1="14.52" x2="14.48" y2="19.48"/>
+<line x1="9.52" y1="19.48" x2="14.48" y2="14.52"/></g><text x="12" y="10.6" font-size="2.3" text-anchor="middle" font-weight="600">R1 · agent</text><line x1="16" y1="17" x2="26" y2="17" stroke="#1C1F26" stroke-width="0.25"/><line x1="26" y1="5" x2="26" y2="29" stroke="#1C1F26" stroke-width="0.25"/><line x1="26" y1="5" x2="91" y2="5" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="93" y="2" width="4" height="6"/>
+<line x1="93.8" y1="3.6" x2="96.2" y2="3.6"/>
+<line x1="93.8" y1="5" x2="96.2" y2="5"/></g><text x="99" y="4.6" font-size="2.2" font-weight="600">NMS (manager SNMP)</text><text x="99" y="7.4" font-size="1.9" class="m t2">192.0.2.50</text><text x="58" y="3.8" font-size="2.1" text-anchor="middle">Get / Set : NMS → agent, UDP 161</text><text x="58" y="8" font-size="2.1" text-anchor="middle">Trap / Inform : agent → NMS, UDP 162</text><line x1="26" y1="17" x2="91" y2="17" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="93" y="14" width="4" height="6"/>
+<line x1="93.8" y1="15.6" x2="96.2" y2="15.6"/>
+<line x1="93.8" y1="17" x2="96.2" y2="17"/></g><text x="99" y="16.6" font-size="2.2" font-weight="600">Serveur Syslog</text><text x="99" y="19.4" font-size="1.9" class="m t2">192.0.2.51</text><text x="58" y="15.8" font-size="2.1" text-anchor="middle">Syslog : UDP 514</text><line x1="26" y1="29" x2="91" y2="29" stroke="#1C1F26" stroke-width="0.25"/><g stroke="#1C1F26" stroke-width="0.25" fill="#F4F1EA">
+<rect x="93" y="26" width="4" height="6"/>
+<line x1="93.8" y1="27.6" x2="96.2" y2="27.6"/>
+<line x1="93.8" y1="29" x2="96.2" y2="29"/></g><text x="99" y="28.6" font-size="2.2" font-weight="600">Serveur TFTP</text><text x="99" y="31.4" font-size="1.9" class="m t2">192.0.2.52</text><text x="58" y="27.8" font-size="2.1" text-anchor="middle">copy running-config tftp: (UDP 69)</text><line x1="2" y1="34" x2="122" y2="34" stroke="#D6D0C4" stroke-width="0.25"/><text x="2" y="39" font-size="1.95" class="m">*Nov  6 10:02:11.512: %LINK-3-UPDOWN: Interface GigabitEthernet0/0/1, changed state to down</text><line x1="2" y1="40.1" x2="25.4" y2="40.1" stroke="#1C1F26" stroke-width="0.3"/><line x1="13.7" y1="40.1" x2="13.7" y2="41.199999999999996" stroke="#5B6470" stroke-width="0.15"/><text x="13.7" y="43.4" font-size="2.1" text-anchor="middle">horodatage</text><line x1="28.909999999999997" y1="40.1" x2="33.589999999999996" y2="40.1" stroke="#1C1F26" stroke-width="0.3"/><line x1="31.249999999999996" y1="40.1" x2="31.249999999999996" y2="41.199999999999996" stroke="#5B6470" stroke-width="0.15"/><text x="31.249999999999996" y="43.4" font-size="2.1" text-anchor="end">facility</text><line x1="34.76" y1="40.1" x2="35.93" y2="40.1" stroke="#1C1F26" stroke-width="0.3"/><line x1="35.345" y1="40.1" x2="35.345" y2="44.4" stroke="#5B6470" stroke-width="0.15"/><text x="35.345" y="46.6" font-size="2.1" text-anchor="middle">gravité (3 = error)</text><line x1="37.099999999999994" y1="40.1" x2="44.11999999999999" y2="40.1" stroke="#1C1F26" stroke-width="0.3"/><line x1="40.60999999999999" y1="40.1" x2="40.60999999999999" y2="41.199999999999996" stroke="#5B6470" stroke-width="0.15"/><text x="40.60999999999999" y="43.4" font-size="2.1" text-anchor="start">mnémonique</text><text x="94" y="43.4" font-size="2.1" text-anchor="middle">description</text>
+</svg><figcaption><b>Fig. 29</b>Le manager interroge l’agent sur UDP 161 ; l’agent alerte sur UDP 162. Dans le message Syslog, 3 = error.</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">61</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">4.0 IP Services</span>
+    <span class="obj">4.4 · 4.5 · 4.9 — suite</span>
+    <span class="num">29<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">R1(config)#</span> snmp-server community LectureSeule RO</td><td class="role">Community v2c en lecture seule</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> snmp-server host 192.0.2.50 version 2c LectureSeule</td><td class="role">Destinataire des traps</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> logging host 192.0.2.51</td><td class="role">Serveur Syslog</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> logging trap warnings</td><td class="role">Niveaux 0 à 4 vers le serveur</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> service timestamps log datetime msec</td><td class="role">Horodatage précis des logs</td></tr>
+<tr><td class="c"><span class="p">R1#</span> copy running-config tftp:</td><td class="role">Sauvegarde vers TFTP</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show logging</td><td class="role">Niveaux actifs et messages</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show snmp</td><td class="role">Compteurs SNMP</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li><code>logging trap warnings</code> (niveau 4) envoie les niveaux 0 à 4, pas le seul niveau 4.</li>
+<li>Le niveau le plus grave porte le plus petit numéro : 0 = emergency, 7 = debugging.</li>
+<li>Requêtes Get/Set : UDP 161 vers l’agent. Traps : UDP 162 vers le manager.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quelle version de SNMP chiffre les échanges ?<ul class="o four"><li><span class="l">A.</span>v1</li><li><span class="l">B.</span>v2c</li><li><span class="l">C.</span>v3</li><li><span class="l">D.</span>Aucune</li></ul></li>
+<li><code>logging trap notifications</code> : quels niveaux partent vers le serveur ?<ul class="o four"><li><span class="l">A.</span>5 seulement</li><li><span class="l">B.</span>0 à 5</li><li><span class="l">C.</span>5 à 7</li><li><span class="l">D.</span>0 à 4</li></ul></li>
+<li>Quel protocole de transfert fonctionne sur UDP 69, sans authentification ?<ul class="o four"><li><span class="l">A.</span>TFTP</li><li><span class="l">B.</span>FTP</li><li><span class="l">C.</span>SCP</li><li><span class="l">D.</span>SFTP</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>Every Awesome Cisco Engineer Will Need Ice cream Daily : niveaux 0 à 7.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> Seul SNMPv3 (authPriv) chiffre ; v1 et v2c envoient la community en clair.</p><p><span class="a">2&nbsp;B</span> notifications = 5 ; les niveaux 0 à 5, plus graves ou égaux, sont envoyés.</p><p><span class="a">3&nbsp;A</span> TFTP : UDP 69, sans compte. FTP : TCP 20/21 ; SCP et SFTP passent par SSH.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">62</span>
+  </footer>
+</section>
+</body>
+</html>

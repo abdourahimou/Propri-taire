@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche 30/40 — QoS : comportement par saut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Charte — Fiches CCNA 200-301 */
+:root {
+  --paper: #F4F1EA;
+  --ink: #1C1F26;
+  --ink-2: #5B6470;
+  --accent: #C8432B;
+  --ok: #2E5E4E;
+  --rule: #D6D0C4;
+  --code-bg: #E9E4D8;
+  --hair: 0.5pt;
+  --f-title: "Archivo Narrow", "Archivo", sans-serif;
+  --f-text: "Source Sans 3", sans-serif;
+  --f-mono: "JetBrains Mono", monospace;
+}
+
+@page { size: 148mm 210mm; margin: 0; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+
+html, body { background: var(--paper); }
+
+body {
+  font-family: var(--f-text);
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-kerning: normal;
+  hyphens: auto;
+}
+
+/* ---- Page A5 : marges 12 mm, grille 6 colonnes, gouttière 4 mm ---- */
+.page {
+  width: 148mm;
+  height: 210mm;
+  padding: 12mm 12mm 13mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  break-after: page;
+}
+.page:last-of-type { break-after: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+}
+
+/* ---- Bandeau ---- */
+.band {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  align-items: end;
+  padding-bottom: 1.6mm;
+  border-bottom: var(--hair) solid var(--ink);
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.15;
+}
+.band .dom { grid-column: 1 / 4; }
+.band .obj { grid-column: 4 / 6; color: var(--ink); }
+.band .num {
+  grid-column: 6 / 7;
+  justify-self: end;
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 0.9;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.band .num small { font-size: 8pt; color: var(--ink-2); letter-spacing: 0.04em; }
+.band.cont .num { font-size: 11pt; }
+
+h1 {
+  font-family: var(--f-title);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+  margin: 3.2mm 0 2.6mm;
+}
+
+h2 {
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-top: var(--hair) solid var(--ink);
+  padding-top: 1.1mm;
+  margin-bottom: 1.4mm;
+}
+h2 .n { color: var(--ink-2); font-variant-numeric: tabular-nums; margin-right: 1.6mm; }
+
+section, .attend, figure { margin-bottom: 2.2mm; }
+
+/* ---- Ce que l'examen attend ---- */
+.attend {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 1.4mm 0;
+}
+.attend .lbl {
+  grid-column: 1 / 2;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  line-height: 1.2;
+  hyphens: none;
+}
+.attend p { grid-column: 2 / 7; font-size: 10pt; line-height: 1.3; }
+
+/* ---- L'essentiel ---- */
+ol.ess { list-style: none; counter-reset: e; }
+ol.ess > li {
+  counter-increment: e;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1.1mm;
+}
+ol.ess > li::before {
+  content: counter(e, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2mm;
+  font-family: var(--f-title);
+  font-weight: 600;
+  font-size: 7.5pt;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+b, strong { font-weight: 700; }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  font-variant-ligatures: none;
+}
+p code, li code, td.role code, .qcm code {
+  background: var(--code-bg);
+  padding: 0 0.6mm;
+  white-space: nowrap;
+}
+
+/* Mini-tableau de référence dans l'essentiel */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1mm 0 0.6mm;
+  font-variant-numeric: tabular-nums;
+  font-size: 8.5pt;
+}
+table.ref th, table.ref td {
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.5mm 1mm;
+  text-align: right;
+}
+table.ref th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; width: 17%;
+}
+table.ref th:first-child, table.ref td:first-child { text-align: left; }
+table.ref td { font-family: var(--f-mono); font-size: 8pt; line-height: 1.2; }
+
+/* ---- Schéma ---- */
+figure.schema { margin-top: auto; }
+figure.schema svg { display: block; width: 100%; height: auto; }
+figure.schema figcaption {
+  font-size: 8pt;
+  color: var(--ink-2);
+  border-top: var(--hair) solid var(--rule);
+  margin-top: 1mm;
+  padding-top: 0.8mm;
+  line-height: 1.3;
+}
+figure.schema figcaption b { color: var(--ink); font-family: var(--f-title); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; font-size: 7pt; margin-right: 1.2mm; }
+
+/* ---- Commandes clés ---- */
+table.cmd {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+table.cmd th {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  text-align: left; padding: 0 1.2mm 0.6mm; border-bottom: var(--hair) solid var(--ink);
+}
+table.cmd td {
+  vertical-align: top;
+  border-bottom: var(--hair) solid var(--rule);
+  padding: 0.55mm 1.2mm;
+}
+table.cmd td.c {
+  width: 63%;
+  background: var(--code-bg);
+  font-family: var(--f-mono);
+  font-size: 8.5pt;
+  line-height: 1.3;
+  padding-left: 4.2mm;
+  text-indent: -3mm;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+table.cmd td.c .p { color: var(--ink-2); }
+table.cmd td.role { font-size: 8.5pt; line-height: 1.25; hyphens: none; }
+table.cmd tr.show td.c { font-weight: 600; }
+table.cmd tr.show td.role::before {
+  content: "VÉRIF. ";
+  font-family: var(--f-title); font-weight: 600; font-size: 6.5pt;
+  letter-spacing: 0.04em; color: var(--ok);
+}
+
+/* ---- Pièges ---- */
+.pieges h2 { color: var(--accent); border-top-color: var(--accent); }
+.pieges ol { list-style: none; counter-reset: p; }
+.pieges li {
+  counter-increment: p;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 0.9mm;
+  font-size: 9pt;
+}
+.pieges li::before {
+  content: "P" counter(p);
+  position: absolute; left: 0; top: 0.1mm;
+  font-family: var(--f-title); font-weight: 700; font-size: 7.5pt;
+  color: var(--accent);
+}
+
+/* ---- Auto-test ---- */
+.qcm ol.q { list-style: none; counter-reset: q; }
+.qcm ol.q > li {
+  counter-increment: q;
+  position: relative;
+  padding-left: 5mm;
+  margin-bottom: 1mm;
+  font-size: 9pt;
+  break-inside: avoid;
+}
+.qcm ol.q > li::before {
+  content: counter(q);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--f-title); font-weight: 700; font-size: 8.5pt;
+}
+.qcm ul.o {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 4mm;
+  row-gap: 0.2mm;
+  margin-top: 0.5mm;
+}
+.qcm ul.o.one { grid-template-columns: 1fr; }
+.qcm ul.o.four { grid-template-columns: repeat(4, 1fr); }
+.qcm ul.o li { padding-left: 3.6mm; text-indent: -3.6mm; font-variant-ligatures: none; }
+.reponses, table.cmd td.role { font-variant-ligatures: none; }
+.qcm ul.o li .l { font-family: var(--f-title); font-weight: 700; display: inline-block; width: 3.6mm; text-indent: 0; }
+
+/* ---- Mnémotechnique ---- */
+.mnemo {
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-size: 9pt;
+}
+.mnemo .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 7pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2);
+  margin-right: 1.6mm;
+}
+
+/* ---- Réponses tête-bêche ---- */
+.reponses {
+  margin-top: auto;
+  transform: rotate(180deg);
+  border-bottom: var(--hair) solid var(--ink);
+  padding-bottom: 1mm;
+  font-size: 7.3pt;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.reponses .lbl {
+  font-family: var(--f-title); font-weight: 600; font-size: 6.8pt;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  margin-right: 1.4mm;
+}
+.reponses .a { font-family: var(--f-title); font-weight: 700; color: var(--ok); margin-right: 0.6mm; }
+.reponses p + p { margin-top: 0.3mm; }
+
+/* ---- Pied de page ---- */
+.foot {
+  position: absolute;
+  left: 12mm; right: 12mm; bottom: 6mm;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 4mm;
+  border-top: var(--hair) solid var(--rule);
+  padding-top: 1mm;
+  font-family: var(--f-title);
+  font-size: 6.8pt;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.foot .t { grid-column: 1 / 4; }
+.foot .brand { grid-column: 4 / 6; min-height: 3mm; }
+.foot .pg { grid-column: 6 / 7; text-align: right; color: var(--ink); font-weight: 600; }
+
+/* ---- SVG ---- */
+svg text { font-family: var(--f-text); fill: var(--ink); }
+svg .m { font-family: var(--f-mono); }
+svg .t2 { fill: var(--ink-2); }
+svg .acc { fill: var(--accent); }
+
+/* Glyphes absents de Source Sans 3 (sous-ensemble latin) */
+.ar { font-family: var(--f-mono); font-size: 0.9em; }
+sup { font-size: 0.68em; line-height: 0; vertical-align: 0.42em; }
+
+</style>
+</head>
+<body>
+
+<section class="page recto">
+  <header class="band">
+    <span class="dom">4.0 IP Services</span>
+    <span class="obj">4.7</span>
+    <span class="num">30<small>/40</small></span>
+  </header>
+  <h1>QoS : comportement par saut</h1>
+  <div class="attend"><span class="lbl">Ce que l’examen attend</span><p>Expliquer le comportement par saut (PHB) de la QoS : classification, marquage, files d’attente, congestion, policing et shaping.</p></div>
+  <section><h2><span class="n">01</span>L’essentiel</h2><ol class="ess"><li>Voix : latence de 150 ms maximum de bout en bout, gigue de 30 ms maximum, perte de 1 % maximum, débit faible et constant. Vidéo interactive : contraintes proches, débit plus élevé. Données : tolérantes.</li>
+<li>Classification : reconnaître le trafic (ACL, NBAR, marquage reçu). Marquage : écrire une valeur dans l’en-tête ; CoS (3 bits PCP de 802.1Q, couche 2), DSCP (6 bits de l’en-tête IP, couche 3).</li>
+<li>DSCP usuels : EF (46) pour la voix, AF41 (34) pour la vidéo interactive, CS6 (48) pour le contrôle réseau, 0 (best effort). AFxy : x = classe (1 à 4), y = probabilité de rejet (1 à 3).</li>
+<li>Frontière de confiance (trust boundary) : point à partir duquel les marquages sont acceptés, idéalement le téléphone IP ou le port d’accès.</li>
+<li>Congestion : CBWFQ garantit une bande passante par classe ; LLQ y ajoute une file prioritaire stricte pour la voix. WRED rejette tôt et au hasard pour éviter la saturation et la synchronisation des flux TCP.</li>
+<li>Policing : rejette ou re-marque l’excédent, en entrée ou en sortie. Shaping : met l’excédent en file et le retarde, en sortie seulement.</li></ol></section>
+  <figure class="schema"><svg viewBox="0 0 124 46" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QoS : chaîne et limitation">
+<defs>
+  <marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#1C1F26"/></marker>
+  <marker id="aha" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0.6 L5.4,3 L0,5.4 z" fill="#C8432B"/></marker>
+</defs>
+<g><rect x="4" y="3" width="20" height="6" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="14" y="6.8" font-size="2.3" text-anchor="middle" font-weight="600">Classifier</text></g><g><rect x="28" y="3" width="20" height="6" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="38" y="6.8" font-size="2.3" text-anchor="middle" font-weight="600">Marquer</text></g><g><rect x="52" y="3" width="20" height="6" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/>
+<text x="62" y="6.8" font-size="2.3" text-anchor="middle" font-weight="600">Files</text></g><line x1="24" y1="6" x2="27.6" y2="6" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><line x1="48" y1="6" x2="51.6" y2="6" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="14" y="12" font-size="1.9" text-anchor="middle" class="t2">ACL, NBAR, DSCP reçu</text><text x="38" y="12" font-size="1.9" text-anchor="middle" class="t2">CoS (L2), DSCP (L3)</text><line x1="72" y1="6" x2="76" y2="6" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><rect x="78" y="1.2" width="26" height="2.6" fill="#E9E4D8" stroke="#1C1F26" stroke-width="0.25"/><text x="79" y="3.0999999999999996" font-size="1.85" font-weight="600">LLQ · voix EF</text><rect x="78" y="4.8" width="26" height="2.6" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/><text x="79" y="6.7" font-size="1.85">CBWFQ · vidéo AF41</text><rect x="78" y="8.4" width="26" height="2.6" fill="#F4F1EA" stroke="#1C1F26" stroke-width="0.25"/><text x="79" y="10.299999999999999" font-size="1.85">CBWFQ · défaut</text><line x1="104" y1="6" x2="110" y2="6" stroke="#1C1F26" stroke-width="0.25" marker-end="url(#ah)"/><text x="111" y="7" font-size="2.1">sortie</text><text x="91" y="14" font-size="1.9" text-anchor="middle" class="t2">ordonnanceur : LLQ servie en premier</text><text x="4" y="21.4" font-size="2.3" font-weight="600">Policing</text><line x1="4" y1="42" x2="56" y2="42" stroke="#1C1F26" stroke-width="0.25"/><line x1="4" y1="42" x2="4" y2="26" stroke="#1C1F26" stroke-width="0.25"/><line x1="4" y1="33" x2="56" y2="33" stroke="#C8432B" stroke-width="0.25" stroke-dasharray="0.8 0.6"/><text x="56" y="32.2" font-size="1.8" text-anchor="end" class="acc">débit contractuel</text><polyline points="4,35 10,35 12,29 20,29 22,37 28,37 30,28 38,28 40,36 48,36 50,34 56,34" fill="none" stroke="#D6D0C4" stroke-width="0.4"/><polyline points="4,35 10,35 12,33 20,33 22,37 28,37 30,33 38,33 40,36 48,36 50,34 56,34" fill="none" stroke="#1C1F26" stroke-width="0.35"/><text x="4" y="45.2" font-size="1.9" class="t2">excédent rejeté (ou re-marqué)</text><text x="68" y="21.4" font-size="2.3" font-weight="600">Shaping</text><line x1="68" y1="42" x2="120" y2="42" stroke="#1C1F26" stroke-width="0.25"/><line x1="68" y1="42" x2="68" y2="26" stroke="#1C1F26" stroke-width="0.25"/><line x1="68" y1="33" x2="120" y2="33" stroke="#C8432B" stroke-width="0.25" stroke-dasharray="0.8 0.6"/><text x="120" y="32.2" font-size="1.8" text-anchor="end" class="acc">débit contractuel</text><polyline points="68,35 74,35 76,29 84,29 86,37 92,37 94,28 102,28 104,36 112,36 114,34 120,34" fill="none" stroke="#D6D0C4" stroke-width="0.4"/><polyline points="68,35 74,35 76,33 92,33 94,33 108,33 112,34.5 120,35" fill="none" stroke="#1C1F26" stroke-width="0.35"/><text x="68" y="45.2" font-size="1.9" class="t2">excédent mis en file, puis émis plus tard</text>
+</svg><figcaption><b>Fig. 30</b>En haut, le traitement d’un paquet dans un équipement. En bas, le même trafic (gris) limité par un policer et par un shaper (noir).</figcaption></figure>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">63</span>
+  </footer>
+</section>
+<section class="page verso">
+  <header class="band cont">
+    <span class="dom">4.0 IP Services</span>
+    <span class="obj">4.7 — suite</span>
+    <span class="num">30<small>/40</small></span>
+  </header>
+  <section class="cmd" style="margin-top:2.4mm"><h2><span class="n">02</span>Commandes clés</h2>
+    <table class="cmd"><thead><tr><th>Commande</th><th>Rôle</th></tr></thead><tbody><tr><td class="c"><span class="p">R1(config)#</span> class-map match-any VOIX</td><td class="role">Définit la classe VOIX</td></tr>
+<tr><td class="c"><span class="p">R1(config-cmap)#</span> match dscp ef</td><td class="role">Critère : DSCP EF</td></tr>
+<tr><td class="c"><span class="p">R1(config)#</span> policy-map WAN-OUT</td><td class="role">Crée la politique</td></tr>
+<tr><td class="c"><span class="p">R1(config-pmap)#</span> class VOIX</td><td class="role">Sélectionne la classe</td></tr>
+<tr><td class="c"><span class="p">R1(config-pmap-c)#</span> priority percent 20</td><td class="role">LLQ : file prioritaire, 20 %</td></tr>
+<tr><td class="c"><span class="p">R1(config-pmap-c)#</span> bandwidth percent 30</td><td class="role">CBWFQ, sous une autre classe</td></tr>
+<tr><td class="c"><span class="p">R1(config-if)#</span> service-policy output WAN-OUT</td><td class="role">Applique en sortie</td></tr>
+<tr class="show"><td class="c"><span class="p">R1#</span> show policy-map interface g0/0/0</td><td class="role">Compteurs par classe</td></tr></tbody></table>
+  </section>
+  <section class="pieges"><h2><span class="n">03</span>Pièges d’examen</h2><ol><li>Policing rejette, shaping retarde. Le shaping ne s’applique qu’en sortie.</li>
+<li>La CoS vit dans l’étiquette 802.1Q et disparaît au routage ; le DSCP voyage dans l’en-tête IP.</li>
+<li>AF43 n’est pas plus prioritaire qu’AF41 : le second chiffre indique un rejet plus probable.</li></ol></section>
+  <section class="qcm"><h2><span class="n">04</span>Auto-test</h2><ol class="q"><li>Quelle valeur DSCP est recommandée pour la voix ?<ul class="o four"><li><span class="l">A.</span>AF41</li><li><span class="l">B.</span>CS6</li><li><span class="l">C.</span>EF</li><li><span class="l">D.</span>AF11</li></ul></li>
+<li>Quel mécanisme place l’excédent en file d’attente pour lisser le débit ?<ul class="o four"><li><span class="l">A.</span>Policing</li><li><span class="l">B.</span>Shaping</li><li><span class="l">C.</span>WRED</li><li><span class="l">D.</span>NBAR</li></ul></li>
+<li>Quel outil ajoute une file prioritaire stricte à CBWFQ ?<ul class="o four"><li><span class="l">A.</span>WRED</li><li><span class="l">B.</span>FIFO</li><li><span class="l">C.</span>NBAR</li><li><span class="l">D.</span>LLQ</li></ul></li></ol></section>
+  <p class="mnemo"><span class="lbl">Repère</span>Le policer coupe, le shaper fait patienter.</p>
+  <div class="reponses"><p><span class="lbl">Réponses</span><span class="a">1&nbsp;C</span> EF (46) : expedited forwarding, pour la voix.</p><p><span class="a">2&nbsp;B</span> Le shaper retarde ; le policer rejette ou re-marque.</p><p><span class="a">3&nbsp;D</span> LLQ = CBWFQ + file prioritaire, limitée pour ne pas affamer les autres classes.</p></div>
+  <footer class="foot">
+    <span class="t">CCNA 200-301 — Fiches de révision</span>
+    <span class="brand" data-brand></span>
+    <span class="pg">64</span>
+  </footer>
+</section>
+</body>
+</html>
